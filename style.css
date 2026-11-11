@@ -1,102 +1,237 @@
-/* RESET BÁSICO E CONFIGURAÇÕES GERAIS */
+
+/* =========================================
+   MATRIX OS - CYBERPUNK NEW TAB
+   STYLE.CSS
+========================================= */
+
+
+/* =========================================
+   1. RESET E CONFIGURAÇÕES GERAIS
+========================================= */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+
     font-family: 'Courier New', Courier, monospace;
 }
 
+:root {
+    --matrix-green: #00ff66;
+    --matrix-green-soft: #88ffbb;
+    --matrix-green-dark: #00cc52;
+
+    --background: #0d0d0d;
+    --terminal-background: rgba(5, 12, 5, 0.96);
+
+    --border-glow: rgba(0, 255, 102, 0.5);
+    --shadow-glow: rgba(0, 255, 102, 0.25);
+}
+
+html,
 body {
-    background-color: #0d0d0d;
-    color: #00ff66;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+
     overflow: hidden;
+}
+
+body {
+    background-color: var(--background);
+
+    color: var(--matrix-green);
+
     position: relative;
+
     display: flex;
+
     justify-content: center;
     align-items: center;
+
+    isolation: isolate;
 }
 
-/* CANVAS DO EFEITO MATRIX (FUNDO) */
+
+/* =========================================
+   2. CANVAS MATRIX
+========================================= */
+
 #matrix-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: fixed;
+
+    inset: 0;
+
     width: 100%;
     height: 100%;
-    z-index: 1;
+
+    z-index: -2;
+
+    pointer-events: none;
 }
 
-/* OVERLAY PARA MELHORAR A LEITURA DO CONTEÚDO */
+
+/* =========================================
+   3. OVERLAY
+========================================= */
+
 .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: fixed;
+
+    inset: 0;
+
     width: 100%;
     height: 100%;
-    background: rgba(10, 15, 10, 0.85);
-    z-index: 2;
+
+    background: rgba(10, 15, 10, 0.82);
+
+    z-index: -1;
+
+    pointer-events: none;
 }
 
-/* BOTÃO DE ACIONAMENTO DO TERMINAL (TOPO) */
-#toggle-terminal-btn {
+
+/* =========================================
+   4. ACESSIBILIDADE
+========================================= */
+
+.visually-hidden {
     position: absolute;
+
+    width: 1px;
+    height: 1px;
+
+    padding: 0;
+    margin: -1px;
+
+    overflow: hidden;
+
+    clip: rect(0, 0, 0, 0);
+
+    white-space: nowrap;
+
+    border: 0;
+}
+
+
+/* =========================================
+   5. BOTÃO ABRIR TERMINAL
+========================================= */
+
+#toggle-terminal-btn {
+    position: fixed;
+
     top: 20px;
     right: 20px;
-    z-index: 5;
+
+    z-index: 20;
+
     background: rgba(0, 255, 102, 0.1);
-    border: 1px solid #00ff66;
-    color: #00ff66;
-    padding: 8px 14px;
+
+    border: 1px solid var(--matrix-green);
+
+    color: var(--matrix-green);
+
+    padding: 10px 16px;
+
     border-radius: 4px;
+
     cursor: pointer;
+
+    font-size: 0.9rem;
     font-weight: bold;
-    box-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
-    transition: all 0.2s ease;
+
+    box-shadow: 0 0 10px var(--shadow-glow);
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
 }
 
 #toggle-terminal-btn:hover {
-    background: #00ff66;
-    color: #0d0d0d;
-    box-shadow: 0 0 15px #00ff66;
+    background: var(--matrix-green);
+
+    color: var(--background);
+
+    box-shadow: 0 0 18px var(--matrix-green);
+
+    transform: translateY(-2px);
 }
 
-/* CONTAINER PRINCIPAL DO DASHBOARD */
+#toggle-terminal-btn:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 4px;
+}
+
+
+/* =========================================
+   6. DASHBOARD PRINCIPAL
+========================================= */
+
 .container {
     position: relative;
-    z-index: 3;
+
+    z-index: 2;
+
     width: 90%;
+
     max-width: 800px;
+
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
+
     gap: 25px;
+
     padding: 20px;
 }
 
-/* SEÇÃO DO RELÓGIO */
+
+/* =========================================
+   7. RELÓGIO
+========================================= */
+
 .clock-section {
     text-align: center;
 }
 
 #clock {
     font-size: 3.5rem;
+
     font-weight: bold;
-    color: #00ff66;
-    text-shadow: 0 0 20px rgba(0, 255, 102, 0.8), 0 0 10px rgba(0, 255, 102, 0.4);
+
+    color: var(--matrix-green);
+
+    text-shadow:
+        0 0 20px rgba(0, 255, 102, 0.8),
+        0 0 10px rgba(0, 255, 102, 0.4);
+
     letter-spacing: 2px;
 }
 
 #date {
     font-size: 1.05rem;
-    color: #88ffbb;
+
+    color: var(--matrix-green-soft);
+
     margin-top: 5px;
-    opacity: 0.8;
+
+    opacity: 0.85;
 }
 
-/* BARRA DE PESQUISA CENTRALIZADA */
+
+/* =========================================
+   8. BARRA DE PESQUISA
+========================================= */
+
 .search-section {
     width: 100%;
+
     max-width: 550px;
 }
 
@@ -106,172 +241,557 @@ body {
 
 #search-input {
     width: 100%;
-    padding: 12px 18px;
-    background: rgba(0, 0, 0, 0.7);
-    border: 1px solid #00ff66;
+
+    padding: 14px 18px;
+
+    background: rgba(0, 0, 0, 0.75);
+
+    border: 1px solid var(--matrix-green);
+
     border-radius: 6px;
-    color: #ffffff;
+
+    color: white;
+
     font-size: 1rem;
+
     outline: none;
-    box-shadow: 0 0 10px rgba(0, 255, 102, 0.25), inset 0 0 5px rgba(0, 255, 102, 0.1);
-    transition: all 0.2s ease;
+
+    box-shadow:
+        0 0 10px var(--shadow-glow),
+        inset 0 0 5px rgba(0, 255, 102, 0.1);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 #search-input:focus {
-    box-shadow: 0 0 20px rgba(0, 255, 102, 0.5), inset 0 0 8px rgba(0, 255, 102, 0.2);
-    border-color: #88ffbb;
+    border-color: var(--matrix-green-soft);
+
+    box-shadow:
+        0 0 20px rgba(0, 255, 102, 0.5),
+        inset 0 0 8px rgba(0, 255, 102, 0.2);
 }
 
 #search-input::placeholder {
-    color: rgba(0, 255, 102, 0.5);
+    color: rgba(0, 255, 102, 0.55);
 }
 
-/* SEÇÃO DE ATALHOS RÁPIDOS */
+#search-input:focus-visible {
+    outline: 1px solid var(--matrix-green-soft);
+
+    outline-offset: 3px;
+}
+
+
+/* =========================================
+   9. ATALHOS RÁPIDOS
+========================================= */
+
 .shortcuts {
     display: flex;
+
     gap: 15px;
+
     flex-wrap: wrap;
+
     justify-content: center;
 }
 
 .shortcut-btn {
-    color: #00ff66;
+    color: var(--matrix-green);
+
     text-decoration: none;
+
     font-size: 0.95rem;
-    padding: 8px 14px;
-    border: 1px solid #00ff66;
+
+    padding: 9px 14px;
+
+    border: 1px solid var(--matrix-green);
+
     border-radius: 4px;
+
     background: rgba(0, 255, 102, 0.05);
-    transition: all 0.2s ease-in-out;
-    box-shadow: 0 0 5px rgba(0, 255, 102, 0.2);
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+
+    box-shadow: 0 0 5px var(--shadow-glow);
 }
 
 .shortcut-btn:hover {
-    background: #00ff66;
-    color: #0d0d0d;
-    box-shadow: 0 0 15px #00ff66;
+    background: var(--matrix-green);
+
+    color: var(--background);
+
+    box-shadow: 0 0 15px var(--matrix-green);
+
     transform: translateY(-2px);
 }
 
-/* JANELA DO TERMINAL INTERATIVO (FLUTUANTE) */
+.shortcut-btn:focus-visible {
+    outline: 2px solid white;
+
+    outline-offset: 4px;
+}
+
+
+/* =========================================
+   10. TERMINAL FLUTUANTE
+========================================= */
+
 .terminal {
-    position: absolute;
-    bottom: 30px;
+    position: fixed;
+
+    top: auto;
     left: 50%;
+
+    bottom: 30px;
+
     transform: translateX(-50%);
+
     width: 90%;
+
     max-width: 650px;
-    background: rgba(5, 12, 5, 0.95);
-    border: 1px solid #00ff66;
+
+    height: auto;
+
+    max-height: calc(100vh - 40px);
+
+    background: var(--terminal-background);
+
+    border: 1px solid var(--matrix-green);
+
     border-radius: 6px;
-    box-shadow: 0 0 25px rgba(0, 255, 102, 0.3), inset 0 0 10px rgba(0, 255, 102, 0.1);
+
+    box-shadow:
+        0 0 25px rgba(0, 255, 102, 0.3),
+        inset 0 0 10px rgba(0, 255, 102, 0.1);
+
     overflow: hidden;
+
     z-index: 10;
-    transition: width 0.2s ease, height 0.2s ease;
+
+    display: flex;
+
+    flex-direction: column;
+
+    transition:
+        width 0.2s ease,
+        height 0.2s ease,
+        opacity 0.2s ease;
 }
 
-/* ESTADOS DO TERMINAL */
-.terminal.minimized .terminal-content-wrapper {
-    display: none;
-}
 
-.terminal.maximized {
-    width: 96% !important;
-    height: 85vh !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-}
-
-.terminal.maximized .terminal-body {
-    max-height: calc(85vh - 100px) !important;
-}
+/* =========================================
+   11. TERMINAL OCULTO
+========================================= */
 
 .terminal.hidden {
     display: none !important;
 }
 
+
+/* =========================================
+   12. TERMINAL MINIMIZADO
+========================================= */
+
+.terminal.minimized {
+    height: auto;
+
+    max-height: none;
+}
+
+.terminal.minimized .terminal-content-wrapper {
+    display: none;
+}
+
+
+/* =========================================
+   13. TERMINAL MAXIMIZADO
+========================================= */
+
+.terminal.maximized {
+    top: 50%;
+
+    left: 50%;
+
+    bottom: auto;
+
+    transform: translate(-50%, -50%);
+
+    width: 96%;
+
+    height: 85vh;
+
+    max-height: 90vh;
+}
+
+.terminal.maximized .terminal-content-wrapper {
+    flex: 1;
+
+    min-height: 0;
+
+    display: flex;
+
+    flex-direction: column;
+}
+
+.terminal.maximized .terminal-body {
+    flex: 1;
+
+    max-height: none;
+}
+
+
+/* =========================================
+   14. CABEÇALHO DO TERMINAL
+========================================= */
+
 .terminal-header {
     background: rgba(0, 255, 102, 0.15);
-    padding: 10px;
+
+    padding: 10px 12px;
+
     display: flex;
+
     align-items: center;
+
     gap: 8px;
+
     border-bottom: 1px solid rgba(0, 255, 102, 0.3);
+
     cursor: grab;
+
     user-select: none;
+
+    -webkit-user-select: none;
+
+    touch-action: none;
 }
 
 .terminal-header:active {
     cursor: grabbing;
 }
 
+
+/* =========================================
+   15. CONTROLOS DA JANELA
+========================================= */
+
 .window-controls {
     display: flex;
+
+    align-items: center;
+
     gap: 8px;
+
+    flex-shrink: 0;
 }
 
 .dot {
-    width: 12px;
-    height: 12px;
+    width: 13px;
+
+    height: 13px;
+
+    border: none;
+
     border-radius: 50%;
+
     display: inline-block;
+
     cursor: pointer;
-    transition: opacity 0.2s;
+
+    padding: 0;
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
 }
 
 .dot:hover {
     opacity: 0.7;
+
+    transform: scale(1.15);
 }
 
-.red { background-color: #ff5f56; }
-.yellow { background-color: #ffbd2e; }
-.green { background-color: #27c93f; }
+.dot:focus-visible {
+    outline: 2px solid white;
+
+    outline-offset: 3px;
+}
+
+.red {
+    background-color: #ff5f56;
+}
+
+.yellow {
+    background-color: #ffbd2e;
+}
+
+.green {
+    background-color: #27c93f;
+}
+
+
+/* =========================================
+   16. TÍTULO DO TERMINAL
+========================================= */
 
 .terminal-title {
     font-size: 0.85rem;
-    color: #88ffbb;
+
+    color: var(--matrix-green-soft);
+
     margin-left: 10px;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   17. CONTEÚDO DO TERMINAL
+========================================= */
+
+.terminal-content-wrapper {
+    display: flex;
+
+    flex-direction: column;
+
+    min-height: 0;
 }
 
 .terminal-body {
     padding: 15px;
+
     max-height: 200px;
+
     overflow-y: auto;
+
     font-size: 0.95rem;
+
     line-height: 1.5;
+
+    overflow-wrap: anywhere;
+
+    scrollbar-width: thin;
+
+    scrollbar-color: var(--matrix-green) transparent;
 }
 
+
+/* =========================================
+   18. MENSAGENS DO SISTEMA
+========================================= */
+
 .system-msg {
-    color: #00cc52;
+    color: var(--matrix-green-dark);
 }
 
 .highlight {
-    color: #ffffff;
+    color: white;
+
     font-weight: bold;
 }
 
-/* LINHA DE DIGITAÇÃO DE COMANDOS */
+
+/* =========================================
+   19. LINHA DE COMANDOS
+========================================= */
+
 .terminal-input-line {
     display: flex;
+
     align-items: center;
+
     padding: 10px 15px;
+
     background: rgba(0, 0, 0, 0.4);
+
     border-top: 1px solid rgba(0, 255, 102, 0.2);
+
+    gap: 8px;
 }
 
 .prompt {
-    color: #00ff66;
-    margin-right: 10px;
+    color: var(--matrix-green);
+
     white-space: nowrap;
+
     font-weight: bold;
+
+    font-size: 0.9rem;
 }
 
 #terminal-input {
     background: transparent;
+
     border: none;
+
     outline: none;
-    color: #ffffff;
+
+    color: white;
+
     font-size: 1rem;
+
     width: 100%;
+
+    min-width: 0;
+}
+
+#terminal-input:focus-visible {
+    outline: 1px solid var(--matrix-green);
+
+    outline-offset: 3px;
+}
+
+
+/* =========================================
+   20. SCROLLBAR PERSONALIZADA
+========================================= */
+
+.terminal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.terminal-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.terminal-body::-webkit-scrollbar-thumb {
+    background: var(--matrix-green-dark);
+
+    border-radius: 10px;
+}
+
+
+/* =========================================
+   21. RESPONSIVIDADE - TABLETS
+========================================= */
+
+@media (max-width: 768px) {
+
+    #clock {
+        font-size: 2.8rem;
+    }
+
+    .container {
+        gap: 20px;
+    }
+
+    .terminal {
+        width: calc(100% - 30px);
+
+        max-width: none;
+    }
+
+}
+
+
+/* =========================================
+   22. RESPONSIVIDADE - TELEMÓVEIS
+========================================= */
+
+@media (max-width: 600px) {
+
+    #toggle-terminal-btn {
+        top: 12px;
+
+        right: 12px;
+
+        padding: 9px 12px;
+
+        font-size: 0.8rem;
+    }
+
+    #clock {
+        font-size: 2.2rem;
+
+        letter-spacing: 1px;
+    }
+
+    #date {
+        font-size: 0.85rem;
+    }
+
+    .container {
+        width: 100%;
+
+        padding: 15px;
+
+        gap: 20px;
+    }
+
+    #search-input {
+        font-size: 0.9rem;
+
+        padding: 12px;
+    }
+
+    .shortcuts {
+        gap: 10px;
+    }
+
+    .shortcut-btn {
+        font-size: 0.8rem;
+
+        padding: 8px 10px;
+    }
+
+    .terminal {
+        width: calc(100% - 20px);
+
+        max-height: calc(100vh - 30px);
+    }
+
+    .terminal-body {
+        font-size: 0.85rem;
+
+        max-height: 180px;
+    }
+
+    .terminal-title {
+        font-size: 0.75rem;
+    }
+
+    .prompt {
+        font-size: 0.8rem;
+    }
+
+    #terminal-input {
+        font-size: 0.9rem;
+    }
+
+    .terminal.maximized {
+        width: calc(100% - 16px);
+
+        height: 90vh;
+
+        max-height: 92vh;
+    }
+
+}
+
+
+/* =========================================
+   23. ACESSIBILIDADE - MOVIMENTO REDUZIDO
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+
+        transition-duration: 0.01ms !important;
+
+        animation-duration: 0.01ms !important;
+
+        animation-iteration-count: 1 !important;
+    }
+
 }
