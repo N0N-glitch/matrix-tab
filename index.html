@@ -11,12 +11,12 @@
     <!-- Canvas para o fundo com Efeito Matrix -->
     <canvas id="matrix-canvas"></canvas>
 
-    <!-- Overlay escuro para melhorar a leitura dos elementos -->
+    <!-- Overlay escuro para melhorar a leitura -->
     <div class="overlay"></div>
 
-    <!-- Botão de Acionamento do Terminal (Topo) -->
-    <button id="toggle-terminal-btn" title="Abrir/Fechar Terminal">
-        <span>>_ Terminal</span>
+    <!-- Botão de Acionamento do Terminal (Canto Superior Esquerdo) -->
+    <button id="toggle-terminal-btn" class="top-terminal-btn" title="Ligar/Desligar Terminal">
+        <span>>_</span>
     </button>
 
     <!-- Container Principal do Dashboard -->
@@ -31,29 +31,29 @@
         <!-- Barra de Pesquisa Centralizada -->
         <section class="search-section">
             <form id="search-form">
-                <input type="text" id="search-input" placeholder="Pesquise no Google ou digite uma URL..." autocomplete="off" spellcheck="false">
+                <input type="text" id="search-input" placeholder="Pesquise ou escreva um URL..." autocomplete="off" spellcheck="false">
             </form>
         </section>
 
-        <!-- Seção de Atalhos Rápidos (Quick Links) -->
-        <section class="shortcuts">
-            <a href="https://github.com" class="shortcut-btn" target="_blank">[ GitHub ]</a>
-            <a href="https://youtube.com" class="shortcut-btn" target="_blank">[ YouTube ]</a>
-            <a href="https://chatgpt.com" class="shortcut-btn" target="_blank">[ ChatGPT ]</a>
-            <a href="https://stackoverflow.com" class="shortcut-btn" target="_blank">[ StackOverflow ]</a>
+        <!-- Seção de Atalhos Rápidos com Botão de Adicionar -->
+        <section class="shortcuts-container">
+            <div class="shortcuts" id="shortcuts-grid">
+                <!-- Os atalhos serão injetados aqui via JS -->
+            </div>
+            <button id="add-shortcut-btn" class="shortcut-btn add-btn" title="Adicionar Novo Atalho">[ + Novo ]</button>
         </section>
 
     </main>
 
-    <!-- Seção do Terminal Interativo (Flutuante e Arrastável) -->
-    <section class="terminal" id="draggable-terminal">
+    <!-- Seção do Terminal Interativo (Flutuante e Arrastável - Inicia Oculto) -->
+    <section class="terminal hidden" id="draggable-terminal">
         <div class="terminal-header" id="terminal-drag-handle">
             <div class="window-controls">
                 <span class="dot red" id="btn-close" title="Fechar"></span>
                 <span class="dot yellow" id="btn-minimize" title="Minimizar"></span>
                 <span class="dot green" id="btn-expand" title="Expandir/Restaurar"></span>
             </div>
-            <span class="terminal-title">matrix-tab ~ bash</span>
+            <span class="terminal-title">>_ Abrir Terminal</span>
         </div>
         
         <div class="terminal-content-wrapper" id="terminal-content-wrapper">
@@ -65,7 +65,7 @@
 
             <div class="terminal-input-line">
                 <span class="prompt">user@matrix-tab:~$</span>
-                <input type="text" id="terminal-input" autofocus autocomplete="off" spellcheck="false">
+                <input type="text" id="terminal-input" autocomplete="off" spellcheck="false">
             </div>
         </div>
     </section>
