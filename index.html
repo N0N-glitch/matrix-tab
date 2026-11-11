@@ -14,6 +14,11 @@
     <!-- Overlay escuro para melhorar a leitura dos elementos -->
     <div class="overlay"></div>
 
+    <!-- Botão de Acionamento do Terminal (Topo) -->
+    <button id="toggle-terminal-btn" title="Abrir/Fechar Terminal">
+        <span>>_ Terminal</span>
+    </button>
+
     <!-- Container Principal do Dashboard -->
     <main class="container">
         
@@ -21,6 +26,13 @@
         <section class="clock-section">
             <h1 id="clock">00:00:00</h1>
             <p id="date">Carregando data...</p>
+        </section>
+
+        <!-- Barra de Pesquisa Centralizada -->
+        <section class="search-section">
+            <form id="search-form">
+                <input type="text" id="search-input" placeholder="Pesquise no Google ou digite uma URL..." autocomplete="off" spellcheck="false">
+            </form>
         </section>
 
         <!-- Seção de Atalhos Rápidos (Quick Links) -->
@@ -31,15 +43,20 @@
             <a href="https://stackoverflow.com" class="shortcut-btn" target="_blank">[ StackOverflow ]</a>
         </section>
 
-        <!-- Seção do Terminal Interativo -->
-        <section class="terminal">
-            <div class="terminal-header">
-                <span class="dot red"></span>
-                <span class="dot yellow"></span>
-                <span class="dot green"></span>
-                <span class="terminal-title">matrix-tab ~ bash</span>
+    </main>
+
+    <!-- Seção do Terminal Interativo (Flutuante e Arrastável) -->
+    <section class="terminal" id="draggable-terminal">
+        <div class="terminal-header" id="terminal-drag-handle">
+            <div class="window-controls">
+                <span class="dot red" id="btn-close" title="Fechar"></span>
+                <span class="dot yellow" id="btn-minimize" title="Minimizar"></span>
+                <span class="dot green" id="btn-expand" title="Expandir/Restaurar"></span>
             </div>
-            
+            <span class="terminal-title">matrix-tab ~ bash</span>
+        </div>
+        
+        <div class="terminal-content-wrapper" id="terminal-content-wrapper">
             <div class="terminal-body" id="terminal-output">
                 <p class="system-msg">Matrix OS v1.0.0 (x86_64-pc-browser)</p>
                 <p class="system-msg">Digite <span class="highlight">'help'</span> para ver os comandos disponíveis.</p>
@@ -50,11 +67,9 @@
                 <span class="prompt">user@matrix-tab:~$</span>
                 <input type="text" id="terminal-input" autofocus autocomplete="off" spellcheck="false">
             </div>
-        </section>
-
-    </main>
+        </div>
+    </section>
 
     <script src="script.js"></script>
 </body>
 </html>
-
