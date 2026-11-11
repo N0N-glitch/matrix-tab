@@ -1,1 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Tab</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Canvas para o fundo com Efeito Matrix -->
+    <canvas id="matrix-canvas"></canvas>
+
+    <!-- Overlay escuro para melhorar a leitura dos elementos -->
+    <div class="overlay"></div>
+
+    <!-- Container Principal do Dashboard -->
+    <main class="container">
+        
+        <!-- Seção do Relógio e Data -->
+        <section class="clock-section">
+            <h1 id="clock">00:00:00</h1>
+            <p id="date">Carregando data...</p>
+        </section>
+
+        <!-- Seção de Atalhos Rápidos (Quick Links) -->
+        <section class="shortcuts">
+            <a href="https://github.com" class="shortcut-btn" target="_blank">[ GitHub ]</a>
+            <a href="https://youtube.com" class="shortcut-btn" target="_blank">[ YouTube ]</a>
+            <a href="https://chatgpt.com" class="shortcut-btn" target="_blank">[ ChatGPT ]</a>
+            <a href="https://stackoverflow.com" class="shortcut-btn" target="_blank">[ StackOverflow ]</a>
+        </section>
+
+        <!-- Seção do Terminal Interativo -->
+        <section class="terminal">
+            <div class="terminal-header">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+                <span class="terminal-title">matrix-tab ~ bash</span>
+            </div>
+            
+            <div class="terminal-body" id="terminal-output">
+                <p class="system-msg">Matrix OS v1.0.0 (x86_64-pc-browser)</p>
+                <p class="system-msg">Digite <span class="highlight">'help'</span> para ver os comandos disponíveis.</p>
+                <br>
+            </div>
+
+            <div class="terminal-input-line">
+                <span class="prompt">user@matrix-tab:~$</span>
+                <input type="text" id="terminal-input" autofocus autocomplete="off" spellcheck="false">
+            </div>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
 
