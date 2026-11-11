@@ -1,215 +1,75 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta name="theme-color" content="#0d0d0d">
-    <meta name="description" content="Matrix OS - Cyberpunk New Tab">
-
-    <title>Matrix OS | Cyberpunk New Tab</title>
-
+    <title>Matrix Tab</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-    <!-- FUNDO MATRIX -->
-    <canvas id="matrix-canvas" aria-hidden="true"></canvas>
+    <!-- Canvas para o fundo com Efeito Matrix -->
+    <canvas id="matrix-canvas"></canvas>
 
-    <!-- OVERLAY -->
-    <div class="overlay" aria-hidden="true"></div>
+    <!-- Overlay escuro para melhorar a leitura dos elementos -->
+    <div class="overlay"></div>
 
-    <!-- BOTÃO ABRIR TERMINAL -->
-    <button
-        id="toggle-terminal-btn"
-        type="button"
-        title="Abrir ou fechar terminal"
-        aria-controls="draggable-terminal"
-        aria-expanded="false">
-
-        <span>&gt;_ Terminal</span>
-
+    <!-- Botão de Acionamento do Terminal (Topo) -->
+    <button id="toggle-terminal-btn" title="Abrir/Fechar Terminal">
+        <span>>_ Terminal</span>
     </button>
 
-    <!-- DASHBOARD PRINCIPAL -->
+    <!-- Container Principal do Dashboard -->
     <main class="container">
-
-        <!-- RELÓGIO -->
+        
+        <!-- Seção do Relógio e Data -->
         <section class="clock-section">
-
             <h1 id="clock">00:00:00</h1>
-
             <p id="date">Carregando data...</p>
-
         </section>
 
-        <!-- PESQUISA -->
+        <!-- Barra de Pesquisa Centralizada -->
         <section class="search-section">
-
-            <form
-                id="search-form"
-                action="https://www.google.com/search"
-                method="GET">
-
-                <label for="search-input" class="visually-hidden">
-                    Pesquisar na internet ou introduzir um endereço
-                </label>
-
-                <input
-                    type="text"
-                    id="search-input"
-                    name="q"
-                    placeholder="Pesquise no Google ou digite uma URL..."
-                    autocomplete="off"
-                    spellcheck="false"
-                    required
-                >
-
+            <form id="search-form">
+                <input type="text" id="search-input" placeholder="Pesquise no Google ou digite uma URL..." autocomplete="off" spellcheck="false">
             </form>
-
         </section>
 
-        <!-- ATALHOS -->
-        <nav class="shortcuts" aria-label="Atalhos rápidos">
-
-            <a
-                href="https://github.com"
-                class="shortcut-btn"
-                target="_blank"
-                rel="noopener noreferrer">
-                [ GitHub ]
-            </a>
-
-            <a
-                href="https://youtube.com"
-                class="shortcut-btn"
-                target="_blank"
-                rel="noopener noreferrer">
-                [ YouTube ]
-            </a>
-
-            <a
-                href="https://chatgpt.com"
-                class="shortcut-btn"
-                target="_blank"
-                rel="noopener noreferrer">
-                [ ChatGPT ]
-            </a>
-
-            <a
-                href="https://stackoverflow.com"
-                class="shortcut-btn"
-                target="_blank"
-                rel="noopener noreferrer">
-                [ StackOverflow ]
-            </a>
-
-        </nav>
+        <!-- Seção de Atalhos Rápidos (Quick Links) -->
+        <section class="shortcuts">
+            <a href="https://github.com" class="shortcut-btn" target="_blank">[ GitHub ]</a>
+            <a href="https://youtube.com" class="shortcut-btn" target="_blank">[ YouTube ]</a>
+            <a href="https://chatgpt.com" class="shortcut-btn" target="_blank">[ ChatGPT ]</a>
+            <a href="https://stackoverflow.com" class="shortcut-btn" target="_blank">[ StackOverflow ]</a>
+        </section>
 
     </main>
 
-    <!-- TERMINAL FLUTUANTE -->
-    <section
-        class="terminal hidden"
-        id="draggable-terminal"
-        aria-label="Terminal Matrix OS"
-        aria-hidden="true">
-
-        <!-- CABEÇALHO / ÁREA DE ARRASTO -->
-        <header
-            class="terminal-header"
-            id="terminal-drag-handle">
-
-            <!-- CONTROLOS -->
+    <!-- Seção do Terminal Interativo (Flutuante e Arrastável) -->
+    <section class="terminal" id="draggable-terminal">
+        <div class="terminal-header" id="terminal-drag-handle">
             <div class="window-controls">
-
-                <button
-                    class="dot red"
-                    id="btn-close"
-                    type="button"
-                    title="Fechar terminal"
-                    aria-label="Fechar terminal">
-                </button>
-
-                <button
-                    class="dot yellow"
-                    id="btn-minimize"
-                    type="button"
-                    title="Minimizar terminal"
-                    aria-label="Minimizar terminal">
-                </button>
-
-                <button
-                    class="dot green"
-                    id="btn-expand"
-                    type="button"
-                    title="Maximizar ou restaurar terminal"
-                    aria-label="Maximizar ou restaurar terminal">
-                </button>
-
+                <span class="dot red" id="btn-close" title="Fechar"></span>
+                <span class="dot yellow" id="btn-minimize" title="Minimizar"></span>
+                <span class="dot green" id="btn-expand" title="Expandir/Restaurar"></span>
             </div>
-
-            <!-- TÍTULO -->
-            <span class="terminal-title">
-                matrix-tab ~ bash
-            </span>
-
-        </header>
-
-        <!-- CONTEÚDO DO TERMINAL -->
-        <div
-            class="terminal-content-wrapper"
-            id="terminal-content-wrapper">
-
-            <!-- SAÍDA -->
-            <div
-                class="terminal-body"
-                id="terminal-output"
-                aria-live="polite"
-                aria-label="Saída do terminal">
-
-                <p class="system-msg">
-                    Matrix OS v1.0.0 (x86_64-pc-browser)
-                </p>
-
-                <p class="system-msg">
-                    Digite
-                    <span class="highlight">'help'</span>
-                    para ver os comandos disponíveis.
-                </p>
-
-                <br>
-
-            </div>
-
-            <!-- ENTRADA DE COMANDOS -->
-            <form
-                class="terminal-input-line"
-                id="terminal-form">
-
-                <label
-                    for="terminal-input"
-                    class="prompt">
-                    user@matrix-tab:~$
-                </label>
-
-                <input
-                    type="text"
-                    id="terminal-input"
-                    autocomplete="off"
-                    spellcheck="false"
-                    aria-label="Introduzir comando no terminal">
-
-            </form>
-
+            <span class="terminal-title">matrix-tab ~ bash</span>
         </div>
+        
+        <div class="terminal-content-wrapper" id="terminal-content-wrapper">
+            <div class="terminal-body" id="terminal-output">
+                <p class="system-msg">Matrix OS v1.0.0 (x86_64-pc-browser)</p>
+                <p class="system-msg">Digite <span class="highlight">'help'</span> para ver os comandos disponíveis.</p>
+                <br>
+            </div>
 
+            <div class="terminal-input-line">
+                <span class="prompt">user@matrix-tab:~$</span>
+                <input type="text" id="terminal-input" autofocus autocomplete="off" spellcheck="false">
+            </div>
+        </div>
     </section>
 
-    <!-- JAVASCRIPT -->
     <script src="script.js"></script>
-
 </body>
 </html>
