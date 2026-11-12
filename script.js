@@ -1,35 +1,97 @@
+
 /* =====================================================
-   MATRIX OS - CYBERPUNK NEW TAB
-   SCRIPT.JS
+   MATRIX TAB - MAIN SCRIPT
    ===================================================== */
 
+const $ = (selector) => document.querySelector(selector);
+
+const clockElement = $('#clock');
+const dateElement = $('#date');
+const canvas = $('#matrix-canvas');
+
+const terminal = $('#draggable-terminal');
+const terminalHeader = $('#terminal-drag-handle');
+const terminalInput = $('#terminal-input');
+const terminalOutput = $('#terminal-output');
+
+const toggleTerminalButton = $('#toggle-terminal-btn');
+const closeButton = $('#btn-close');
+const minimizeButton = $('#btn-minimize');
+const expandButton = $('#btn-expand');
+
+const searchForm = $('#search-form');
+const searchInput = $('#search-input');
+const shortcutsGrid = $('#shortcuts-grid');
+const addShortcutBtn = $('#add-shortcut-btn');
+const shortcutCount = $('#shortcut-count');
+const modeLabel = $('#mode-label');
+
+const MODE_KEY = 'matrixTabMode';
+const SHORTCUTS_KEY = 'matrixShortcuts';
+const TERMINAL_POSITION_KEY = 'matrixTerminalPosition';
+
+let matrixAnimationFrame = null;
+let matrixLastFrame = 0;
+let matrixDrops = [];
+let matrixColumns = 0;
+
+let isDragging = false;
+let dragOffsetX = 0;
+let dragOffsetY = 0;
+let restorePosition = null;
+
 /* =====================================================
-   ELEMENTOS DA PÁGINA
+   1. MATRIX MODE
    ===================================================== */
 
-const clockElement = document.getElementById('clock');
-const dateElement = document.getElementById('date');
-const canvas = document.getElementById('matrix-canvas');
+function isMatrixEnabled() {
+    return document.body.classList.contains('normal-mode') === false;
+}
 
-const terminal = document.getElementById('draggable-terminal');
-const terminalHeader = document.getElementById('terminal-drag-handle');
-const terminalInput = document.getElementById('terminal-input');
-const terminalOutput = document.getElementById('terminal-output');
+function setMode(enabled) {
+    document.body.classList.toggle('normal-mode', !enabled);
 
-const toggleTerminalButton = document.getElementById('toggle-terminal-btn');
-const closeButton = document.getElementById('btn-close');
-const minimizeButton = document.getElementById('btn-minimize');
-const expandButton = document.getElementById('btn-expand');
+    try {
+        localStorage.setItem(
+            MODE_KEY,
+            enabled ? 'matrix' : 'normal'
+        );
+    } catch {}
 
-const searchForm = document.getElementById('search-form');
-const searchInput = document.getElementById('search-input');
+    if (modeLabel) {
+        modeLabel.textContent = enabled
+            ? 'SYSTEM ONLINE'
+            : 'NORMAL MODE';
+    }
 
-const shortcutsGrid = document.getElementById('shortcuts-grid');
-const addShortcutBtn = document.getElementById('add-shortcut-btn');
+    if (enabled) {
+        startMatrix();
+    } else {
+        stopMatrix();
+    }
 
+    if (terminalOutput) {
+        addTerminalMessage(
+            enabled
+                ? 'Matrix mode enabled.'
+                : 'Matrix mode disabled.',
+            'system-msg'
+        );
+    }
+}
+
+function loadMode() {
+    let savedMode = 'matrix';
+
+    try {
+        savedMode = localStorage.getItem(MODE_KEY) || 'matrix';
+    } catch {}
+
+    setMode(savedMode !== 'normal');
+}
 
 /* =====================================================
-   1. RELÓGIO E DATA
+   2. CLOCK AND DATE
    ===================================================== */
 
 function updateClock() {
@@ -37,43 +99,42 @@ function updateClock() {
 
     const now = new Date();
 
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
+    clockElement.textContent = now.toLocaleTimeString(
+        'pt-BR',
+        {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        }
+    );
 
-    clockElement.textContent = `${hours}:${minutes}:${seconds}`;
-
-    const options = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    };
-
-    dateElement.textContent = now.toLocaleDateString('pt-BR', options);
+    dateElement.textContent = now.toLocaleDateString(
+        'pt-BR',
+        {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        }
+    );
 }
 
 updateClock();
 setInterval(updateClock, 1000);
 
-
 /* =====================================================
-   2. CHUVA DIGITAL MATRIX
+   3. MATRIX RAIN
    ===================================================== */
 
 if (canvas) {
     const ctx = canvas.getContext('2d');
 
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*+-/<>\\';
+    const characters =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*+-/<>\\';
 
     const fontSize = 17;
     const frameInterval = 45;
-
-    let columns = 0;
-    let drops = [];
-
-    let animationFrame = null;
-    let lastFrameTime = 0;
 
     const reducedMotion = window.matchMedia(
         '(prefers-reduced-motion: reduce)'
@@ -96,48 +157,57 @@ if (canvas) {
 
         ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
 
-        columns = Math.ceil(width / fontSize);
+        matrixColumns = Math.ceil(width / fontSize);
 
-        const previousDrops = drops;
-        drops = [];
+        const previousDrops = matrixDrops;
+        matrixDrops = [];
 
-        for (let i = 0; i < columns; i++) {
-            drops[i] = previousDrops[i] !== undefined
-                ? previousDrops[i]
-                : Math.random() * -100;
+        for (let i = 0; i < matrixColumns; i++) {
+            matrixDrops[i] =
+                previousDrops[i] !== undefined
+                    ? previousDrops[i]
+                    : Math.random() * -100;
         }
 
-        // Limpa o canvas depois de cada redimensionamento.
         ctx.clearRect(0, 0, width, height);
     }
 
     function drawMatrix(timestamp = 0) {
-        if (document.hidden) {
-            animationFrame = null;
+        if (
+            document.hidden ||
+            !isMatrixEnabled() ||
+            reducedMotion.matches
+        ) {
+            matrixAnimationFrame = null;
             return;
         }
 
-        if (timestamp - lastFrameTime < frameInterval) {
-            animationFrame = requestAnimationFrame(drawMatrix);
+        if (timestamp - matrixLastFrame < frameInterval) {
+            matrixAnimationFrame =
+                requestAnimationFrame(drawMatrix);
             return;
         }
 
-        lastFrameTime = timestamp;
+        matrixLastFrame = timestamp;
 
-        // Camada escura para criar o efeito de rasto.
         ctx.fillStyle = 'rgba(8, 13, 9, 0.12)';
-        ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+        ctx.fillRect(
+            0,
+            0,
+            window.innerWidth,
+            window.innerHeight
+        );
 
         ctx.fillStyle = '#00c853';
         ctx.font = `${fontSize}px monospace`;
 
-        for (let i = 0; i < drops.length; i++) {
+        for (let i = 0; i < matrixDrops.length; i++) {
             const character = characters.charAt(
                 Math.floor(Math.random() * characters.length)
             );
 
             const x = i * fontSize;
-            const y = drops[i] * fontSize;
+            const y = matrixDrops[i] * fontSize;
 
             ctx.fillText(character, x, y);
 
@@ -145,42 +215,50 @@ if (canvas) {
                 y > window.innerHeight &&
                 Math.random() > 0.985
             ) {
-                drops[i] = 0;
+                matrixDrops[i] = 0;
             }
 
-            drops[i]++;
+            matrixDrops[i]++;
         }
 
-        animationFrame = requestAnimationFrame(drawMatrix);
+        matrixAnimationFrame =
+            requestAnimationFrame(drawMatrix);
     }
 
     function startMatrix() {
-        if (animationFrame !== null) return;
-
-        if (reducedMotion.matches) {
-            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        if (
+            matrixAnimationFrame !== null ||
+            !isMatrixEnabled() ||
+            reducedMotion.matches ||
+            document.hidden
+        ) {
             return;
         }
 
-        lastFrameTime = 0;
-        animationFrame = requestAnimationFrame(drawMatrix);
+        matrixLastFrame = 0;
+        matrixAnimationFrame =
+            requestAnimationFrame(drawMatrix);
     }
 
     function stopMatrix() {
-        if (animationFrame !== null) {
-            cancelAnimationFrame(animationFrame);
-            animationFrame = null;
+        if (matrixAnimationFrame !== null) {
+            cancelAnimationFrame(matrixAnimationFrame);
+            matrixAnimationFrame = null;
         }
+
+        ctx.clearRect(
+            0,
+            0,
+            window.innerWidth,
+            window.innerHeight
+        );
     }
 
     resizeCanvas();
-    startMatrix();
 
-    // Atualiza a animação quando o ecrã muda de tamanho ou orientação.
     window.addEventListener('resize', resizeCanvas);
     window.addEventListener('orientationchange', resizeCanvas);
 
-    // Evita manter a animação ativa quando o separador não está visível.
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
             stopMatrix();
@@ -189,20 +267,22 @@ if (canvas) {
         }
     });
 
-    // Respeita a preferência do dispositivo por movimento reduzido.
     reducedMotion.addEventListener('change', () => {
         if (reducedMotion.matches) {
             stopMatrix();
-            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
         } else {
             startMatrix();
         }
     });
+
+    window.matrixControls = {
+        start: startMatrix,
+        stop: stopMatrix
+    };
 }
 
-
 /* =====================================================
-   3. SISTEMA DE ATALHOS DINÂMICOS
+   4. SHORTCUTS
    ===================================================== */
 
 const defaultShortcuts = [
@@ -212,41 +292,16 @@ const defaultShortcuts = [
     { name: 'StackOverflow', url: 'https://stackoverflow.com' }
 ];
 
-// Ícones SVG dos atalhos padrão.
-// São elementos visuais estáticos, não conteúdo fornecido pelo utilizador.
-
-const shortcutIcons = {
-    GitHub: `
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path fill="currentColor" d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.55.1.76-.24.76-.53v-2.08c-3.1.67-3.76-1.32-3.76-1.32-.5-1.28-1.23-1.62-1.23-1.62-1.01-.69.08-.68.08-.68 1.12.08 1.71 1.15 1.71 1.15.99 1.7 2.6 1.21 3.23.92.1-.72.39-1.21.7-1.49-2.48-.28-5.09-1.24-5.09-5.52 0-1.22.44-2.21 1.15-2.99-.12-.28-.5-1.42.11-2.95 0 0 .94-.3 3.05 1.14a10.6 10.6 0 0 1 5.56 0c2.11-1.44 3.05-1.14 3.05-1.14.61 1.53.23 2.67.11 2.95.72.78 1.15 1.77 1.15 2.99 0 4.29-2.61 5.23-5.1 5.51.4.35.76 1.02.76 2.06V22c0 .29.2.63.76.52A11.1 11.1 0 0 0 12 .9Z"/>
-        </svg>
-    `,
-
-    YouTube: `
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.7V8.3l6.3 3.7-6.3 3.7Z"/>
-        </svg>
-    `,
-
-    ChatGPT: `
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-            <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 3.2a4.2 4.2 0 0 1 4.1 3.2 4.2 4.2 0 0 1 3.1 6.4 4.2 4.2 0 0 1-2 6.8 4.2 4.2 0 0 1-7.1 1.2 4.2 4.2 0 0 1-6.2-4.3 4.2 4.2 0 0 1-.1-7.1A4.2 4.2 0 0 1 12 3.2Z"/>
-                <path d="m8.2 6.1 7.6 4.4v7.3M4.8 9.2l7.5 4.4 6.5-3.7M7.2 17.2l7.5-4.3M12 3.2v7.4"/>
-            </g>
-        </svg>
-    `,
-
-    StackOverflow: `
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path fill="currentColor" d="M17.2 20.2v-5.1h1.8V22H3v-6.9h1.8v5.1h12.4ZM6.2 17.7h9.9v-1.8H6.2v1.8Zm.3-4.2 9.7 2.1.4-1.8-9.7-2.1-.4 1.8Zm1.2-4.1 9 4.2.8-1.7-9-4.2-.8 1.7Zm2.3-3.8 7.7 6.2 1.2-1.5-7.7-6.2-1.2 1.5Zm4-3.8-1.5 1.1 5.8 8.1 1.5-1.1L14 1.8Z"/>
-        </svg>
-    `
+const shortcutInitials = {
+    GitHub: 'GH',
+    YouTube: 'YT',
+    ChatGPT: 'AI',
+    StackOverflow: 'SO'
 };
 
 function getStoredShortcuts() {
     try {
-        const stored = localStorage.getItem('matrixShortcuts');
+        const stored = localStorage.getItem(SHORTCUTS_KEY);
 
         if (!stored) {
             return [...defaultShortcuts];
@@ -263,7 +318,6 @@ function getStoredShortcuts() {
             typeof item.name === 'string' &&
             typeof item.url === 'string'
         );
-
     } catch {
         return [...defaultShortcuts];
     }
@@ -272,11 +326,11 @@ function getStoredShortcuts() {
 function saveShortcuts(shortcuts) {
     try {
         localStorage.setItem(
-            'matrixShortcuts',
+            SHORTCUTS_KEY,
             JSON.stringify(shortcuts)
         );
     } catch (error) {
-        console.warn('Erro ao salvar atalhos:', error);
+        console.warn('Could not save shortcuts:', error);
     }
 }
 
@@ -287,6 +341,11 @@ function renderShortcuts() {
 
     const shortcuts = getStoredShortcuts();
 
+    if (shortcutCount) {
+        shortcutCount.textContent =
+            `${String(shortcuts.length).padStart(2, '0')} SITES`;
+    }
+
     shortcuts.forEach((item, index) => {
         const link = document.createElement('a');
 
@@ -294,27 +353,21 @@ function renderShortcuts() {
         link.className = 'shortcut-card';
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
-        link.title = `Abrir ${item.name}`;
+        link.title = `Open ${item.name}`;
 
-        // Ícone conhecido ou ícone genérico para atalhos personalizados.
         const icon = document.createElement('span');
         icon.className = 'shortcut-icon';
-
-        if (shortcutIcons[item.name]) {
-            icon.innerHTML = shortcutIcons[item.name];
-        } else {
-            icon.textContent = '↗';
-        }
+        icon.textContent =
+            shortcutInitials[item.name] ||
+            item.name.substring(0, 2).toUpperCase();
 
         const name = document.createElement('span');
         name.className = 'shortcut-name';
         name.textContent = item.name;
 
-        link.appendChild(icon);
-        link.appendChild(name);
+        link.append(icon, name);
 
-        // Remover um atalho com clique secundário ou toque prolongado.
-        link.addEventListener('contextmenu', (event) => {
+        link.addEventListener('contextmenu', event => {
             event.preventDefault();
             removeShortcut(index);
         });
@@ -327,11 +380,13 @@ function renderShortcuts() {
             }, 750);
         });
 
-        ['pointerup', 'pointerleave', 'pointercancel'].forEach(eventName => {
-            link.addEventListener(eventName, () => {
-                clearTimeout(pressTimer);
-            });
-        });
+        ['pointerup', 'pointerleave', 'pointercancel'].forEach(
+            eventName => {
+                link.addEventListener(eventName, () => {
+                    clearTimeout(pressTimer);
+                });
+            }
+        );
 
         shortcutsGrid.appendChild(link);
     });
@@ -343,7 +398,7 @@ function removeShortcut(index) {
 
     if (!item) return;
 
-    if (confirm(`Deseja remover o atalho '${item.name}'?`)) {
+    if (confirm(`Remove the shortcut "${item.name}"?`)) {
         shortcuts.splice(index, 1);
         saveShortcuts(shortcuts);
         renderShortcuts();
@@ -352,25 +407,25 @@ function removeShortcut(index) {
 
 if (addShortcutBtn) {
     addShortcutBtn.addEventListener('click', () => {
-        const name = prompt('Nome do atalho (ex.: Google):');
+        const name = prompt('Shortcut name:');
 
         if (!name || !name.trim()) return;
 
-        let url = prompt('Endereço do site (ex.: https://google.com):');
+        let url = prompt('Website address:');
 
         if (!url || !url.trim()) return;
 
         url = url.trim();
 
         if (!/^https?:\/\//i.test(url)) {
-            url = 'https://' + url;
+            url = `https://${url}`;
         }
 
         try {
             const parsedUrl = new URL(url);
 
             if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
-                alert('Endereço inválido.');
+                alert('Invalid website address.');
                 return;
             }
 
@@ -385,16 +440,15 @@ if (addShortcutBtn) {
             renderShortcuts();
 
         } catch {
-            alert('Não foi possível reconhecer esse endereço.');
+            alert('Could not recognize this address.');
         }
     });
 }
 
 renderShortcuts();
 
-
 /* =====================================================
-   4. SISTEMA DE PESQUISA
+   5. SEARCH
    ===================================================== */
 
 function getSearchDestination(value) {
@@ -402,19 +456,15 @@ function getSearchDestination(value) {
 
     if (!query) return null;
 
-    // Se já for um endereço com HTTP ou HTTPS.
     if (/^https?:\/\//i.test(query)) {
         try {
             const url = new URL(query);
-
             return url.hostname ? url.href : null;
-
         } catch {
             return null;
         }
     }
 
-    // Se parecer um domínio, tenta abrir diretamente.
     const looksLikeAddress =
         !/\s/.test(query) &&
         (query.includes('.') || query.startsWith('localhost'));
@@ -422,43 +472,33 @@ function getSearchDestination(value) {
     if (looksLikeAddress) {
         try {
             const url = new URL(`https://${query}`);
-
             return url.hostname ? url.href : null;
-
         } catch {
             return null;
         }
     }
 
-    // Caso contrário, faz uma pesquisa no Google.
     return `https://www.google.com/search?q=${encodeURIComponent(query)}`;
 }
 
 if (searchForm && searchInput) {
-    searchForm.addEventListener('submit', (event) => {
+    searchForm.addEventListener('submit', event => {
         event.preventDefault();
 
-        const destination = getSearchDestination(searchInput.value);
+        if (!isMatrixEnabled()) return;
 
-        if (!destination) return;
+        const destination =
+            getSearchDestination(searchInput.value);
 
-        window.location.assign(destination);
+        if (destination) {
+            window.location.assign(destination);
+        }
     });
 }
 
-
 /* =====================================================
-   5. CONTROLO DO TERMINAL
+   6. TERMINAL POSITION
    ===================================================== */
-
-const TERMINAL_STORAGE_KEY = 'matrixTerminalPosition';
-
-let isDragging = false;
-
-let dragOffsetX = 0;
-let dragOffsetY = 0;
-
-let restorePosition = null;
 
 function getViewportSize() {
     const viewport = window.visualViewport;
@@ -473,38 +513,20 @@ function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
 }
 
-function getTerminalBounds() {
-    if (!terminal) {
-        return {
-            width: 0,
-            height: 0,
-            maxX: 0,
-            maxY: 0
-        };
-    }
+function setTerminalPosition(x, y, save = true) {
+    if (!terminal) return;
 
     const rect = terminal.getBoundingClientRect();
     const viewport = getViewportSize();
 
-    return {
-        width: rect.width,
-        height: rect.height,
-        maxX: Math.max(0, viewport.width - rect.width),
-        maxY: Math.max(0, viewport.height - rect.height)
-    };
-}
+    const maxX = Math.max(0, viewport.width - rect.width);
+    const maxY = Math.max(0, viewport.height - rect.height);
 
-function setTerminalPosition(x, y, save = true) {
-    if (!terminal) return;
-
-    const bounds = getTerminalBounds();
-
-    const finalX = clamp(x, 0, bounds.maxX);
-    const finalY = clamp(y, 0, bounds.maxY);
+    const finalX = clamp(x, 0, maxX);
+    const finalY = clamp(y, 0, maxY);
 
     terminal.style.left = `${finalX}px`;
     terminal.style.top = `${finalY}px`;
-
     terminal.style.right = 'auto';
     terminal.style.bottom = 'auto';
     terminal.style.transform = 'none';
@@ -512,7 +534,7 @@ function setTerminalPosition(x, y, save = true) {
     if (save) {
         try {
             localStorage.setItem(
-                TERMINAL_STORAGE_KEY,
+                TERMINAL_POSITION_KEY,
                 JSON.stringify({
                     x: finalX,
                     y: finalY
@@ -526,10 +548,8 @@ function initializeTerminalPosition() {
     if (!terminal) return;
 
     try {
-        const saved = localStorage.getItem(TERMINAL_STORAGE_KEY);
-
-        const rect = terminal.getBoundingClientRect();
-        const viewport = getViewportSize();
+        const saved =
+            localStorage.getItem(TERMINAL_POSITION_KEY);
 
         if (saved) {
             const position = JSON.parse(saved);
@@ -543,26 +563,29 @@ function initializeTerminalPosition() {
                     position.y,
                     false
                 );
-
                 return;
             }
         }
+    } catch {}
 
-        setTerminalPosition(
-            (viewport.width - rect.width) / 2,
-            viewport.height - rect.height - 20,
-            false
-        );
+    const viewport = getViewportSize();
+    const rect = terminal.getBoundingClientRect();
 
-    } catch {
-        setTerminalPosition(20, 20, false);
-    }
+    setTerminalPosition(
+        (viewport.width - rect.width) / 2,
+        viewport.height - rect.height - 20,
+        false
+    );
 }
 
 function keepTerminalOnScreen() {
-    if (!terminal || terminal.classList.contains('hidden')) return;
-
-    if (terminal.classList.contains('maximized')) return;
+    if (
+        !terminal ||
+        terminal.classList.contains('hidden') ||
+        terminal.classList.contains('maximized')
+    ) {
+        return;
+    }
 
     const rect = terminal.getBoundingClientRect();
 
@@ -580,69 +603,59 @@ function toggleTerminal() {
 
         initializeTerminalPosition();
 
-        if (terminalInput) {
-            setTimeout(() => terminalInput.focus(), 100);
-        }
-
+        setTimeout(() => {
+            terminalInput?.focus();
+        }, 100);
     } else {
         terminal.classList.add('hidden');
     }
 }
 
-if (toggleTerminalButton) {
-    toggleTerminalButton.addEventListener('click', toggleTerminal);
-}
+toggleTerminalButton?.addEventListener('click', toggleTerminal);
 
-if (closeButton) {
-    closeButton.addEventListener('click', () => {
-        terminal.classList.add('hidden');
-    });
-}
+closeButton?.addEventListener('click', () => {
+    terminal.classList.add('hidden');
+});
 
-if (minimizeButton) {
-    minimizeButton.addEventListener('click', () => {
-        terminal.classList.toggle('minimized');
-    });
-}
+minimizeButton?.addEventListener('click', () => {
+    terminal.classList.toggle('minimized');
+});
 
-if (expandButton) {
-    expandButton.addEventListener('click', () => {
-        const isMaximized = terminal.classList.contains('maximized');
+expandButton?.addEventListener('click', () => {
+    const isMaximized =
+        terminal.classList.contains('maximized');
 
-        if (!isMaximized) {
-            const rect = terminal.getBoundingClientRect();
+    if (!isMaximized) {
+        const rect = terminal.getBoundingClientRect();
 
-            restorePosition = {
-                x: rect.left,
-                y: rect.top
-            };
+        restorePosition = {
+            x: rect.left,
+            y: rect.top
+        };
 
-            terminal.classList.add('maximized');
+        terminal.classList.add('maximized');
+        terminal.style.left = '';
+        terminal.style.top = '';
+        terminal.style.bottom = '';
+        terminal.style.transform = '';
+    } else {
+        terminal.classList.remove('maximized');
 
-            terminal.style.left = '';
-            terminal.style.top = '';
-            terminal.style.transform = '';
-
-        } else {
-            terminal.classList.remove('maximized');
-
-            if (restorePosition) {
-                setTerminalPosition(
-                    restorePosition.x,
-                    restorePosition.y
-                );
-            }
+        if (restorePosition) {
+            setTerminalPosition(
+                restorePosition.x,
+                restorePosition.y
+            );
         }
-    });
-}
-
+    }
+});
 
 /* =====================================================
-   6. ARRASTO DO TERMINAL
+   7. TERMINAL DRAG
    ===================================================== */
 
 if (terminalHeader && terminal) {
-    terminalHeader.addEventListener('pointerdown', (event) => {
+    terminalHeader.addEventListener('pointerdown', event => {
         if (event.pointerType === 'mouse' && event.button !== 0) {
             return;
         }
@@ -663,11 +676,10 @@ if (terminalHeader && terminal) {
         dragOffsetY = event.clientY - rect.top;
 
         terminalHeader.setPointerCapture(event.pointerId);
-
         event.preventDefault();
     });
 
-    terminalHeader.addEventListener('pointermove', (event) => {
+    terminalHeader.addEventListener('pointermove', event => {
         if (!isDragging) return;
 
         setTerminalPosition(
@@ -690,29 +702,32 @@ if (terminalHeader && terminal) {
     terminalHeader.addEventListener('pointercancel', stopDragging);
 }
 
-// Reposiciona o terminal quando a orientação ou a área visível muda.
 window.addEventListener('resize', keepTerminalOnScreen);
 window.addEventListener('orientationchange', keepTerminalOnScreen);
 
 if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', keepTerminalOnScreen);
-    window.visualViewport.addEventListener('scroll', keepTerminalOnScreen);
+    window.visualViewport.addEventListener(
+        'resize',
+        keepTerminalOnScreen
+    );
 }
 
-
 /* =====================================================
-   7. COMANDOS DO TERMINAL
+   8. TERMINAL OUTPUT
    ===================================================== */
 
-function processCommand(cmd) {
+function addTerminalMessage(message, className = 'system-msg') {
     if (!terminalOutput) return;
 
-    const commandText = cmd.trim();
+    const line = document.createElement('p');
+    line.className = className;
+    line.textContent = message;
 
-    if (!commandText) return;
+    terminalOutput.appendChild(line);
+    terminalOutput.scrollTop = terminalOutput.scrollHeight;
+}
 
-    // Mostra o comando digitado como texto simples.
-    // Isto evita que o conteúdo seja interpretado como HTML.
+function addCommandLine(commandText) {
     const line = document.createElement('p');
 
     const prompt = document.createElement('span');
@@ -721,55 +736,117 @@ function processCommand(cmd) {
 
     const command = document.createTextNode(` ${commandText}`);
 
-    line.appendChild(prompt);
-    line.appendChild(command);
-
+    line.append(prompt, command);
     terminalOutput.appendChild(line);
+}
 
-    const response = document.createElement('p');
-    response.className = 'system-msg';
-
-    const lower = commandText.toLowerCase();
-
-    if (lower === 'help') {
-        response.textContent =
-            'Comandos: help, clear, date, time, whoami, about';
-
-    } else if (lower === 'clear' || lower === 'limpar') {
-        terminalOutput.innerHTML = '';
-        return;
-
-    } else if (lower === 'date') {
-        response.textContent = new Date().toLocaleDateString('pt-BR');
-
-    } else if (lower === 'time') {
-        response.textContent = new Date().toLocaleTimeString('pt-BR');
-
-    } else if (lower === 'whoami') {
-        response.textContent = 'user@matrix-tab';
-
-    } else if (lower === 'about') {
-        response.textContent =
-            'Matrix OS v1.0.0 - Cyberpunk New Tab';
-
+function showHelp() {
+    if (isMatrixEnabled()) {
+        addTerminalMessage('Available commands:');
+        addTerminalMessage('help              - Show available commands');
+        addTerminalMessage('clear             - Clear terminal history');
+        addTerminalMessage('date              - Show current date');
+        addTerminalMessage('time              - Show current time');
+        addTerminalMessage('about             - Show project information');
+        addTerminalMessage('disable-matrix    - Switch to Normal Mode (alias: dm)');
+        addTerminalMessage('enable-matrix     - Switch to Matrix Mode (alias: em)');
     } else {
-        response.textContent =
-            `Comando desconhecido: ${commandText}`;
+        addTerminalMessage('Normal Mode is active.');
+        addTerminalMessage('enable-matrix (em) - Return to Matrix Mode');
+    }
+}
+
+/* =====================================================
+   9. TERMINAL COMMANDS
+   ===================================================== */
+
+function processCommand(input) {
+    if (!terminalOutput) return;
+
+    const commandText = input.trim();
+
+    if (!commandText) return;
+
+    addCommandLine(commandText);
+
+    const parts = commandText.toLowerCase().split(/\s+/);
+    const command = parts[0];
+
+    const matrixEnabled = isMatrixEnabled();
+
+    if (command === 'help') {
+        showHelp();
+        return;
     }
 
-    terminalOutput.appendChild(response);
+    if (command === 'enable-matrix' || command === 'em') {
+        if (matrixEnabled) {
+            addTerminalMessage('Matrix mode is already enabled.');
+        } else {
+            setMode(true);
+        }
+        return;
+    }
 
-    terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    if (!matrixEnabled) {
+        addTerminalMessage(
+            'Only enable-matrix (em) is available in Normal Mode.'
+        );
+        return;
+    }
+
+    if (command === 'disable-matrix' || command === 'dm') {
+        setMode(false);
+        return;
+    }
+
+    if (command === 'clear') {
+        terminalOutput.innerHTML = '';
+        return;
+    }
+
+    if (command === 'date') {
+        addTerminalMessage(
+            new Date().toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            })
+        );
+        return;
+    }
+
+    if (command === 'time') {
+        addTerminalMessage(
+            new Date().toLocaleTimeString('en-US')
+        );
+        return;
+    }
+
+    if (command === 'about') {
+        addTerminalMessage(
+            'Matrix Tab v1.0.0 - Matrix-inspired New Tab.'
+        );
+        return;
+    }
+
+    addTerminalMessage(`Unknown command: ${commandText}`);
 }
 
 if (terminalInput) {
-    terminalInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
+    terminalInput.addEventListener('keydown', event => {
+        if (event.key !== 'Enter') return;
 
-            processCommand(terminalInput.value);
+        event.preventDefault();
 
-            terminalInput.value = '';
-        }
+        processCommand(terminalInput.value);
+        terminalInput.value = '';
     });
 }
+
+/* =====================================================
+   10. INITIALIZATION
+   ===================================================== */
+
+loadMode();
