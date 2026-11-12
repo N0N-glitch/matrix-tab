@@ -1,7 +1,12 @@
 
 # Matrix Tab
 
-> A small Matrix-inspired New Tab project, with digital rain, quick shortcuts, search, and an interactive terminal.
+> Give your browser's New Tab a new identity with a refined Matrix-inspired interface, digital rain, quick shortcuts, and an interactive terminal.
+
+[![Version](https://img.shields.io/badge/version-2.0.0-00C853?style=for-the-badge)](https://github.com/N0N-glitch/matrix-tab)
+[![License](https://img.shields.io/github/license/N0N-glitch/matrix-tab?style=for-the-badge)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/N0N-glitch/matrix-tab?style=for-the-badge)](https://github.com/N0N-glitch/matrix-tab/stargazers)
+[![Issues](https://img.shields.io/github/issues/N0N-glitch/matrix-tab?style=for-the-badge)](https://github.com/N0N-glitch/matrix-tab/issues)
 
 ---
 
@@ -17,90 +22,88 @@
 
 ## About
 
-**Matrix Tab** is a small personal project that turns the browser's New Tab page into a space inspired by the Matrix universe.
+**Matrix Tab** is a browser New Tab extension that transforms an ordinary new tab into a clean, interactive environment inspired by the Matrix universe.
 
-I started this project because I wanted to create something with a cyberpunk look while making my new tab a little more useful. It brings together a digital rain animation, a clock, search, shortcuts, and a built-in terminal.
+Version 2.0 brings a more polished interface, improved navigation, a dedicated Normal Mode, and a more organized shortcut system while keeping the project lightweight and built with vanilla web technologies.
 
-This is an independent project that I develop on my own. I'm still learning, experimenting, and improving things as I go. It may have bugs or unfinished parts, and that's part of the process.
+This is an independent project, developed and maintained as a personal learning experience.
 
-## Features
+## What's New in 2.0
 
-- **Matrix Rain:** Animated background created with HTML Canvas.
-- **Live Clock:** Displays the current time, including seconds.
-- **Dynamic Date:** Shows the current day, month, and year.
-- **Quick Search:** Search the web using Google or open a website address directly.
-- **Default Shortcuts:** Quick links to GitHub, YouTube, ChatGPT, and Stack Overflow.
-- **Custom Shortcuts:** Add your own website shortcuts.
-- **Shortcut Removal:** Remove shortcuts using right-click or a long press on mobile.
-- **Interactive Terminal:** A small command line with its own set of commands.
-- **Draggable Terminal:** Move the terminal around the screen.
-- **Terminal Controls:** Close, minimize, expand, and restore the terminal.
-- **Saved Position:** The terminal remembers its last position.
-- **Mobile Support:** The layout and interactions are designed with mobile devices in mind.
+- **Refined Interface:** Improved spacing, visual hierarchy, cards, controls, and responsive behavior.
+- **Two Display Modes:** Switch between Matrix Mode and Normal Mode directly through the terminal.
+- **Normal Mode:** Replaces the clock and date with a neutral MATRIX wordmark and removes the green Matrix aesthetic.
+- **Digital Rain:** Animated Matrix background rendered with HTML Canvas.
+- **Live Clock and Date:** Visible in Matrix Mode.
+- **Quick Shortcuts:** Four shortcuts per page, with pagination and smooth transitions.
+- **Shortcut Management:** Add and remove custom website shortcuts.
+- **Search Bar:** Search the web or enter a website address.
+- **Voice Search:** Available in browsers that support the Web Speech API.
+- **Interactive Terminal:** Draggable terminal window with minimize and maximize controls.
+- **Responsive Layout:** Improved support for smaller screens and mobile devices.
+- **Reduced Motion Support:** Respects the operating system's reduced-motion preference.
 
 ## Terminal Commands
 
-The terminal currently supports these commands:
-
 | Command | Description |
 | --- | --- |
-| `help` | Shows the available commands. |
-| `clear` | Clears the terminal history. |
-| `limpar` | Also clears the terminal history. |
+| `help` | Displays available commands. |
+| `clear` | Clears terminal history. |
 | `date` | Displays the current date. |
 | `time` | Displays the current time. |
-| `whoami` | Displays the simulated user name. |
-| `about` | Shows the project name and version. |
+| `about` | Displays project information. |
+| `echo [text]` | Prints a message in the terminal. |
+| `open [site]` | Opens a website in a new tab. |
+| `disable-matrix` or `dm` | Switches to Normal Mode. |
+| `enable-matrix` or `em` | Returns to Matrix Mode. |
 
-Some examples:
+Examples:
 
 ```bash
 help
+about
 date
 time
-whoami
-about
-clear
+echo Hello, Matrix!
+open github
+open youtube
+dm
+em
 ```
-
-The terminal is still simple. I'd like to add more commands and possibilities in the future.
 
 ## Installation
 
-Matrix Tab is not currently published on the Chrome Web Store. You can try it by loading the project manually in a compatible Chromium-based browser.
+Matrix Tab is not currently distributed through the Chrome Web Store. You can install it manually in a compatible Chromium-based browser.
 
 1. Download or clone this repository.
-2. Open your browser's extensions page by visiting `chrome://extensions/`.
+2. Open your browser's extensions page at `chrome://extensions/`.
 3. Enable **Developer mode**.
 4. Select **Load unpacked**.
-5. Choose the folder containing the Matrix Tab files.
-6. Open a new tab to see the extension.
+5. Choose the Matrix Tab project folder.
+6. Open a new tab.
 
-The exact steps may vary depending on your browser and device.
+Installation steps may vary depending on the browser and device.
 
 ## Compatibility
 
-The project is built with HTML, CSS, and vanilla JavaScript, without a framework.
+Matrix Tab is built with HTML, CSS, and vanilla JavaScript. It does not require a framework or external JavaScript library.
 
-- **Tested:** Lemur Browser on Android.
-- **Not fully verified:** Google Chrome, Microsoft Edge, Brave, and other Chromium-based browsers.
-- **Mobile:** Improving the mobile experience is one of my priorities, but behavior may vary between devices.
+- **Browser engine:** Designed for Chromium-based browsers.
+- **Mobile:** The interface is designed to adapt to smaller screens.
+- **Voice Search:** Depends on browser support for the Web Speech API.
+- **Reduced Motion:** The Matrix animation respects the system accessibility preference.
 
-If you try it on another browser, feedback is welcome.
+Compatibility should be tested on each target browser and device. Behavior may vary.
 
 ## Privacy
 
-I want to keep this project simple and transparent.
-
 - The extension runs locally in the browser.
-- There is no project account system or backend server.
-- I have not added analytics or telemetry to track users.
-- Custom shortcuts and the terminal position are saved in the browser's local storage.
-- Search requests and website shortcuts may open external websites.
+- It does not use a project account system or backend server.
+- It does not include analytics or telemetry.
+- Shortcuts and terminal website commands open external websites when requested.
+- Shortcut and display-mode preferences are stored locally in the browser.
 
-The project currently declares the `storage` permission in its manifest. Permissions and behavior may change as development continues.
-
-This is a personal project, so I cannot make absolute security or privacy guarantees.
+The project aims to remain simple and transparent. No absolute privacy or security guarantees are made.
 
 ## Project Structure
 
@@ -115,74 +118,37 @@ matrix-tab/
 └── style.css
 ```
 
-## Roadmap
+## Version History
 
-There are a few things I'd like to work on as the project grows:
+### 2.0.0 — Interface and Experience Update
 
-- Add more terminal commands.
-- Improve mobile usability and stability.
-- Continue improving animation performance.
-- Test the extension on more Chromium-based browsers.
-- Explore visual customization options.
-- Fix bugs and improve existing features.
+- Refined the overall interface and visual presentation.
+- Added a dedicated Normal Mode with neutral colors.
+- Replaced the clock and date with a MATRIX wordmark in Normal Mode.
+- Improved the Matrix rain animation lifecycle.
+- Added four-shortcut pagination.
+- Added page navigation controls and indicators.
+- Improved shortcut management and validation.
+- Added voice search when supported by the browser.
+- Improved responsive behavior and accessibility.
+- Updated the terminal interface and command documentation.
 
-This is just a list of ideas, not a fixed schedule. Things may change as I learn and find time to work on the project.
+### 1.0.0 — Initial Release
+
+- Created the first Matrix-inspired New Tab page.
+- Added the digital rain animation using HTML Canvas.
+- Added a live clock and dynamic date.
+- Added quick website shortcuts.
+- Created the first interactive terminal.
+- Configured the Chromium extension with Manifest V3.
 
 ## Contributions
 
-Matrix Tab is a personal hobby project, and I'm currently the only person working on it.
+Suggestions, bug reports, and contributions are welcome.
 
-If you find a bug, have an idea, or simply want to share your opinion, I'd be happy to hear from you.
+You can open an Issue to report a problem or suggest an improvement. Pull Requests are also welcome.
 
-Contributions are welcome. You can open an Issue, suggest a feature, share feedback, or submit a Pull Request.
-
-And if you enjoy the project, consider giving it a star on GitHub. It helps other people discover this little project and encourages me to keep working on it.
-
-[⭐ Give Matrix Tab a star on GitHub](https://github.com/N0N-glitch/matrix-tab)
-
-Thanks for taking the time to check it out!
-
-## Bug Reports
-
-If something doesn't work as expected, feel free to open an Issue.
-
-If possible, include:
-
-- Browser name and version.
-- Operating system and device.
-- What you were trying to do.
-- What happened and what you expected.
-- Steps to reproduce the problem.
-
-Even a small report can help me understand what needs attention.
-
-## Development Status
-
-Matrix Tab is currently at version **1.0.0**.
-
-I develop it independently, mainly using an Android phone for development and testing. I work on it in my free time, so updates may be irregular.
-
-I can't promise a fixed update schedule, that every bug will be fixed, or that every suggestion will become a feature.
-
-This project is mainly a way for me to learn, experiment, and build something I enjoy. It's not a commercial product or professionally maintained software.
-
-## Version History
-
-### [1.0.0] — Initial Release
-
-The first public version of Matrix Tab includes:
-
-- Matrix-inspired New Tab page.
-- Animated digital rain background.
-- Live clock and dynamic date.
-- Quick shortcuts to GitHub, YouTube, ChatGPT, and Stack Overflow.
-- Google search and direct website address handling.
-- Custom shortcuts.
-- Interactive terminal with basic commands.
-- Draggable terminal with window controls.
-- Manifest V3 extension setup.
-
-This is just the beginning. There's still plenty I'd like to improve.
+[⭐ Visit Matrix Tab on GitHub](https://github.com/N0N-glitch/matrix-tab)
 
 ## License
 
@@ -194,90 +160,88 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 
 ## Sobre o Projeto
 
-**Matrix Tab** é um pequeno projeto pessoal que transforma a página de Nova Aba do navegador num ambiente inspirado no universo Matrix.
+**Matrix Tab** é uma extensão para a página de Nova Aba do navegador que transforma uma página comum num ambiente interativo inspirado no universo Matrix.
 
-Comecei este projeto porque queria criar algo com uma estética cyberpunk e, ao mesmo tempo, tornar a minha nova aba um pouco mais útil. A ideia é reunir uma animação de chuva digital, um relógio, pesquisa, atalhos e um terminal integrado.
+A versão 2.0 traz uma interface mais refinada, navegação aprimorada, um Modo Normal dedicado e um sistema de atalhos mais organizado, mantendo o projeto leve e desenvolvido com tecnologias web nativas.
 
-Este é um projeto independente, desenvolvido por mim. Ainda estou aprendendo, experimentando e melhorando as coisas aos poucos. Podem existir erros ou partes por terminar, e isso faz parte do processo.
+Este é um projeto independente, desenvolvido e mantido como uma experiência pessoal de aprendizagem.
 
-## Funcionalidades
+## Novidades da Versão 2.0
 
-- **Chuva Matrix:** Fundo animado criado com HTML Canvas.
-- **Relógio em Tempo Real:** Mostra as horas, incluindo os segundos.
-- **Data Dinâmica:** Apresenta o dia, o mês e o ano.
-- **Pesquisa Rápida:** Pesquisa na internet pelo Google ou abre diretamente um endereço de site.
-- **Atalhos Padrão:** Acesso rápido ao GitHub, YouTube, ChatGPT e Stack Overflow.
-- **Atalhos Personalizados:** Permite adicionar os teus próprios sites.
-- **Remoção de Atalhos:** Remove atalhos com clique direito ou toque prolongado no telemóvel.
-- **Terminal Interativo:** Uma pequena linha de comandos com funções próprias.
-- **Terminal Arrastável:** Permite mover o terminal pela tela.
-- **Controles do Terminal:** Fechar, minimizar, expandir e restaurar a janela.
-- **Posição Salva:** O terminal guarda a sua última posição.
-- **Suporte para Telemóveis:** A interface e as interações também são pensadas para dispositivos móveis.
+- **Interface Refinada:** Melhorias nos espaçamentos, hierarquia visual, cartões, controles e adaptação a diferentes telas.
+- **Dois Modos de Exibição:** Alternância entre o Modo Matrix e o Modo Normal através do terminal.
+- **Modo Normal:** Substitui o relógio e a data pela palavra MATRIX em estilo neutro, sem a estética verde do Matrix.
+- **Chuva Digital:** Fundo animado inspirado no Matrix, renderizado com HTML Canvas.
+- **Relógio e Data:** Visíveis no Modo Matrix.
+- **Atalhos Rápidos:** Quatro atalhos por página, com paginação e transições suaves.
+- **Gestão de Atalhos:** Adição e remoção de atalhos personalizados.
+- **Barra de Pesquisa:** Pesquisa na internet ou acesso direto a um endereço.
+- **Pesquisa por Voz:** Disponível em navegadores compatíveis com a Web Speech API.
+- **Terminal Interativo:** Janela arrastável, com opções para minimizar e maximizar.
+- **Interface Responsiva:** Melhor adaptação a ecrãs pequenos e dispositivos móveis.
+- **Acessibilidade:** Respeita a preferência do sistema para movimento reduzido.
 
 ## Comandos do Terminal
-
-Atualmente, o terminal suporta estes comandos:
 
 | Comando | Descrição |
 | --- | --- |
 | `help` | Mostra os comandos disponíveis. |
 | `clear` | Limpa o histórico do terminal. |
-| `limpar` | Também limpa o histórico do terminal. |
 | `date` | Mostra a data atual. |
 | `time` | Mostra a hora atual. |
-| `whoami` | Mostra um nome de utilizador simulado. |
-| `about` | Mostra o nome e a versão do projeto. |
+| `about` | Mostra informações do projeto. |
+| `echo [texto]` | Exibe uma mensagem no terminal. |
+| `open [site]` | Abre um site num novo separador. |
+| `disable-matrix` ou `dm` | Ativa o Modo Normal. |
+| `enable-matrix` ou `em` | Retorna ao Modo Matrix. |
 
-Alguns exemplos:
+Exemplos:
 
 ```bash
 help
+about
 date
 time
-whoami
-about
-clear
+echo Olá, Matrix!
+open github
+open youtube
+dm
+em
 ```
-
-O terminal ainda é simples. Gostaria de adicionar mais comandos e possibilidades no futuro.
 
 ## Instalação
 
-O Matrix Tab ainda não está publicado na Chrome Web Store. Por enquanto, podes experimentar a extensão carregando o projeto manualmente num navegador compatível baseado em Chromium.
+O Matrix Tab ainda não está disponível na Chrome Web Store. É possível instalá-lo manualmente num navegador compatível baseado em Chromium.
 
 1. Descarrega ou clona este repositório.
-2. Abre a página de extensões do navegador através de `chrome://extensions/`.
+2. Abre a página de extensões do navegador em `chrome://extensions/`.
 3. Ativa o **Modo de programador**.
 4. Seleciona **Carregar sem compactação**.
-5. Escolhe a pasta que contém os ficheiros do Matrix Tab.
-6. Abre um novo separador para experimentar a extensão.
+5. Escolhe a pasta do projeto Matrix Tab.
+6. Abre um novo separador.
 
 Os passos podem variar conforme o navegador e o dispositivo.
 
 ## Compatibilidade
 
-O projeto foi desenvolvido com HTML, CSS e JavaScript puro, sem utilizar frameworks.
+O Matrix Tab foi desenvolvido com HTML, CSS e JavaScript puro, sem necessidade de frameworks ou bibliotecas JavaScript externas.
 
-- **Testado:** Lemur Browser no Android.
-- **Ainda não totalmente verificado:** Google Chrome, Microsoft Edge, Brave e outros navegadores baseados em Chromium.
-- **Telemóveis:** Melhorar a experiência em dispositivos móveis é uma das minhas prioridades, mas o funcionamento pode variar conforme o dispositivo.
+- **Motor do navegador:** Desenvolvido para navegadores baseados em Chromium.
+- **Telemóveis:** A interface foi concebida para se adaptar a ecrãs pequenos.
+- **Pesquisa por Voz:** Depende do suporte do navegador à Web Speech API.
+- **Movimento Reduzido:** A animação Matrix respeita a preferência de acessibilidade do sistema.
 
-Se experimentares noutro navegador, qualquer feedback será bem-vindo.
+A compatibilidade deve ser testada em cada navegador e dispositivo. O comportamento pode variar.
 
 ## Privacidade
 
-Quero manter este projeto simples e transparente.
-
 - A extensão funciona localmente no navegador.
-- Não existe sistema de contas nem servidor backend do projeto.
-- Não adicionei ferramentas de análise ou telemetria para acompanhar os utilizadores.
-- Os atalhos personalizados e a posição do terminal são guardados no armazenamento local do navegador.
-- As pesquisas e os atalhos podem abrir sites externos.
+- Não utiliza sistema de contas nem servidor backend.
+- Não inclui ferramentas de análise ou telemetria.
+- Os atalhos e os comandos de sites do terminal abrem páginas externas quando solicitado.
+- As preferências de atalhos e de modo de exibição são guardadas localmente no navegador.
 
-O projeto declara atualmente a permissão `storage` no manifesto. As permissões e o funcionamento podem mudar à medida que o desenvolvimento continua.
-
-Por ser um projeto pessoal, não posso oferecer garantias absolutas de segurança ou privacidade.
+O objetivo é manter o projeto simples e transparente. Não são oferecidas garantias absolutas de privacidade ou segurança.
 
 ## Estrutura do Projeto
 
@@ -292,74 +256,37 @@ matrix-tab/
 └── style.css
 ```
 
-## Planos Futuros
+## Histórico de Versões
 
-Há algumas coisas que gostaria de melhorar à medida que o projeto for crescendo:
+### 2.0.0 — Atualização da Interface e da Experiência
 
-- Adicionar mais comandos ao terminal.
-- Melhorar a experiência e a estabilidade em dispositivos móveis.
-- Continuar a otimizar o desempenho das animações.
-- Testar a extensão em mais navegadores baseados em Chromium.
-- Explorar opções de personalização visual.
-- Corrigir erros e melhorar as funcionalidades existentes.
+- Refinamento da interface e da apresentação visual.
+- Adição de um Modo Normal com cores neutras.
+- Substituição do relógio e da data pela palavra MATRIX no Modo Normal.
+- Melhorias no funcionamento da animação Matrix.
+- Paginação com quatro atalhos por página.
+- Adição de controlos e indicadores de navegação.
+- Melhorias na gestão e validação dos atalhos.
+- Pesquisa por voz quando suportada pelo navegador.
+- Melhorias na adaptação a diferentes ecrãs e na acessibilidade.
+- Atualização da interface e da documentação dos comandos do terminal.
 
-Esta lista é apenas um conjunto de ideias, não um calendário fixo. Os planos podem mudar conforme vou aprendendo e encontrando tempo para trabalhar no projeto.
+### 1.0.0 — Lançamento Inicial
+
+- Criação da primeira página de Nova Aba inspirada no Matrix.
+- Adição da animação de chuva digital com HTML Canvas.
+- Implementação de relógio e data dinâmicos.
+- Adição de atalhos rápidos para sites.
+- Criação do primeiro terminal interativo.
+- Configuração da extensão Chromium com Manifest V3.
 
 ## Contribuições
 
-O Matrix Tab é um projeto pessoal, desenvolvido como hobby, e atualmente sou a única pessoa a trabalhar nele.
+Sugestões, relatos de erros e contribuições são bem-vindos.
 
-Se encontrares algum erro, tiveres uma ideia ou simplesmente quiseres partilhar a tua opinião, ficarei contente por saber.
+Podes abrir uma Issue para comunicar um problema ou sugerir uma melhoria. Pull Requests também são bem-vindos.
 
-Contribuições são bem-vindas. Podes abrir uma Issue, sugerir uma funcionalidade, enviar feedback ou criar um Pull Request.
-
-E, se gostaste do projeto, considera deixar uma estrela no GitHub. Isso ajuda outras pessoas a descobrirem este pequeno projeto e dá-me motivação para continuar a trabalhar nele.
-
-[⭐ Dá uma estrela ao Matrix Tab no GitHub](https://github.com/N0N-glitch/matrix-tab)
-
-Obrigado por tirares um pouco do teu tempo para conhecer o projeto!
-
-## Como Reportar Problemas
-
-Se alguma coisa não funcionar como esperado, podes abrir uma Issue.
-
-Se possível, inclui:
-
-- Nome e versão do navegador.
-- Sistema operativo e dispositivo.
-- O que estavas a tentar fazer.
-- O que aconteceu e o que esperavas que acontecesse.
-- Passos para reproduzir o problema.
-
-Mesmo um pequeno relato pode ajudar a perceber o que precisa de atenção.
-
-## Estado do Desenvolvimento
-
-O Matrix Tab encontra-se atualmente na versão **1.0.0**.
-
-Desenvolvo o projeto de forma independente, principalmente através de um telemóvel Android, que também utilizo para testar. Por isso, trabalho nele no meu tempo livre e as atualizações podem ser irregulares.
-
-Não posso prometer uma frequência fixa de atualizações, a correção de todos os erros ou a implementação de todas as sugestões.
-
-Este projeto é, acima de tudo, uma forma de aprender, experimentar e construir algo de que gosto. Não é um produto comercial nem um software mantido profissionalmente.
-
-## Histórico de Versões
-
-### [1.0.0] — Lançamento Inicial
-
-A primeira versão pública do Matrix Tab inclui:
-
-- Página de Nova Aba inspirada em Matrix.
-- Fundo animado de chuva digital.
-- Relógio em tempo real e data dinâmica.
-- Atalhos para GitHub, YouTube, ChatGPT e Stack Overflow.
-- Pesquisa pelo Google e abertura direta de endereços.
-- Atalhos personalizados.
-- Terminal interativo com comandos básicos.
-- Terminal arrastável com controles de janela.
-- Configuração da extensão com Manifest V3.
-
-Este é apenas o começo. Ainda há muita coisa que gostaria de melhorar.
+[⭐ Visita o Matrix Tab no GitHub](https://github.com/N0N-glitch/matrix-tab)
 
 ## Licença
 
@@ -371,90 +298,88 @@ Este projeto está licenciado sob a **Licença MIT**. Consulta o ficheiro [LICEN
 
 ## Acerca del Proyecto
 
-**Matrix Tab** es un pequeño proyecto personal que transforma la página de Nueva Pestaña del navegador en un entorno inspirado en el universo Matrix.
+**Matrix Tab** es una extensión para la página de Nueva Pestaña del navegador que transforma una página común en un entorno interactivo inspirado en el universo Matrix.
 
-Empecé este proyecto porque quería crear algo con una estética cyberpunk y, al mismo tiempo, hacer que mi nueva pestaña fuera un poco más útil. La idea es reunir una animación de lluvia digital, un reloj, búsqueda, accesos directos y una terminal integrada.
+La versión 2.0 incorpora una interfaz más refinada, navegación mejorada, un Modo Normal dedicado y un sistema de accesos directos más organizado, manteniendo el proyecto ligero y desarrollado con tecnologías web nativas.
 
-Este es un proyecto independiente, desarrollado por mí. Todavía estoy aprendiendo, experimentando y mejorando las cosas poco a poco. Puede haber errores o partes sin terminar, y eso también forma parte del proceso.
+Este es un proyecto independiente, desarrollado y mantenido como una experiencia personal de aprendizaje.
 
-## Funcionalidades
+## Novedades de la Versión 2.0
 
-- **Lluvia Matrix:** Fondo animado creado con HTML Canvas.
-- **Reloj en Tiempo Real:** Muestra la hora, incluidos los segundos.
-- **Fecha Dinámica:** Muestra el día, el mes y el año.
-- **Búsqueda Rápida:** Busca en Internet mediante Google o abre directamente una dirección web.
-- **Accesos Directos Predeterminados:** Enlaces rápidos a GitHub, YouTube, ChatGPT y Stack Overflow.
-- **Accesos Personalizados:** Permite añadir tus propios sitios web.
-- **Eliminación de Accesos:** Permite eliminar accesos con clic derecho o una pulsación larga en el móvil.
-- **Terminal Interactiva:** Una pequeña línea de comandos con funciones propias.
-- **Terminal Desplazable:** Permite mover la terminal por la pantalla.
-- **Controles de la Terminal:** Cerrar, minimizar, ampliar y restaurar la ventana.
-- **Posición Guardada:** La terminal recuerda su última posición.
-- **Soporte para Móviles:** La interfaz y las interacciones también están pensadas para dispositivos móviles.
+- **Interfaz Refinada:** Mejoras en los espacios, la jerarquía visual, las tarjetas, los controles y la adaptación a diferentes pantallas.
+- **Dos Modos de Visualización:** Alternancia entre el Modo Matrix y el Modo Normal mediante la terminal.
+- **Modo Normal:** Sustituye el reloj y la fecha por la palabra MATRIX con un estilo neutro, sin la estética verde de Matrix.
+- **Lluvia Digital:** Fondo animado inspirado en Matrix, renderizado con HTML Canvas.
+- **Reloj y Fecha:** Visibles en el Modo Matrix.
+- **Accesos Directos:** Cuatro accesos por página, con paginación y transiciones suaves.
+- **Gestión de Accesos:** Posibilidad de añadir y eliminar accesos personalizados.
+- **Barra de Búsqueda:** Permite buscar en Internet o acceder directamente a una dirección.
+- **Búsqueda por Voz:** Disponible en navegadores compatibles con Web Speech API.
+- **Terminal Interactiva:** Ventana arrastrable con opciones para minimizar y maximizar.
+- **Diseño Adaptable:** Mejor adaptación a pantallas pequeñas y dispositivos móviles.
+- **Accesibilidad:** Respeta la preferencia del sistema para reducir el movimiento.
 
 ## Comandos de la Terminal
-
-Actualmente, la terminal admite estos comandos:
 
 | Comando | Descripción |
 | --- | --- |
 | `help` | Muestra los comandos disponibles. |
 | `clear` | Limpia el historial de la terminal. |
-| `limpar` | También limpia el historial de la terminal. |
 | `date` | Muestra la fecha actual. |
 | `time` | Muestra la hora actual. |
-| `whoami` | Muestra un nombre de usuario simulado. |
-| `about` | Muestra el nombre y la versión del proyecto. |
+| `about` | Muestra información del proyecto. |
+| `echo [texto]` | Imprime un mensaje en la terminal. |
+| `open [sitio]` | Abre un sitio web en una nueva pestaña. |
+| `disable-matrix` o `dm` | Activa el Modo Normal. |
+| `enable-matrix` o `em` | Vuelve al Modo Matrix. |
 
-Algunos ejemplos:
+Ejemplos:
 
 ```bash
 help
+about
 date
 time
-whoami
-about
-clear
+echo ¡Hola, Matrix!
+open github
+open youtube
+dm
+em
 ```
-
-La terminal todavía es sencilla. Me gustaría añadir más comandos y posibilidades en el futuro.
 
 ## Instalación
 
-Matrix Tab todavía no está publicado en Chrome Web Store. Por ahora, puedes probar la extensión cargando el proyecto manualmente en un navegador compatible basado en Chromium.
+Matrix Tab todavía no está disponible en Chrome Web Store. Puedes instalarlo manualmente en un navegador compatible basado en Chromium.
 
 1. Descarga o clona este repositorio.
-2. Abre la página de extensiones de tu navegador visitando `chrome://extensions/`.
+2. Abre la página de extensiones del navegador en `chrome://extensions/`.
 3. Activa el **Modo de desarrollador**.
 4. Selecciona **Cargar descomprimida**.
-5. Elige la carpeta que contiene los archivos de Matrix Tab.
-6. Abre una nueva pestaña para probar la extensión.
+5. Elige la carpeta del proyecto Matrix Tab.
+6. Abre una nueva pestaña.
 
 Los pasos pueden variar según el navegador y el dispositivo.
 
 ## Compatibilidad
 
-El proyecto está desarrollado con HTML, CSS y JavaScript puro, sin utilizar frameworks.
+Matrix Tab está desarrollado con HTML, CSS y JavaScript puro, sin necesidad de frameworks ni bibliotecas JavaScript externas.
 
-- **Probado:** Lemur Browser en Android.
-- **Aún no verificado por completo:** Google Chrome, Microsoft Edge, Brave y otros navegadores basados en Chromium.
-- **Móviles:** Mejorar la experiencia en dispositivos móviles es una de mis prioridades, pero el funcionamiento puede variar según el dispositivo.
+- **Motor del navegador:** Diseñado para navegadores basados en Chromium.
+- **Móviles:** La interfaz está diseñada para adaptarse a pantallas pequeñas.
+- **Búsqueda por Voz:** Depende del soporte del navegador para Web Speech API.
+- **Movimiento Reducido:** La animación Matrix respeta la preferencia de accesibilidad del sistema.
 
-Si lo pruebas en otro navegador, cualquier comentario será bienvenido.
+La compatibilidad debe probarse en cada navegador y dispositivo. El comportamiento puede variar.
 
 ## Privacidad
 
-Quiero mantener este proyecto sencillo y transparente.
-
 - La extensión funciona localmente en el navegador.
-- No existe un sistema de cuentas ni un servidor backend del proyecto.
-- No he añadido herramientas de análisis ni telemetría para rastrear a los usuarios.
-- Los accesos personalizados y la posición de la terminal se guardan en el almacenamiento local del navegador.
-- Las búsquedas y los accesos directos pueden abrir sitios externos.
+- No utiliza un sistema de cuentas ni un servidor backend.
+- No incluye herramientas de análisis ni telemetría.
+- Los accesos directos y los comandos de sitios de la terminal abren páginas externas cuando se solicita.
+- Las preferencias de accesos y del modo de visualización se guardan localmente en el navegador.
 
-El proyecto declara actualmente el permiso `storage` en el manifiesto. Los permisos y el funcionamiento pueden cambiar a medida que continúa el desarrollo.
-
-Al ser un proyecto personal, no puedo ofrecer garantías absolutas de seguridad o privacidad.
+El objetivo es mantener el proyecto sencillo y transparente. No se ofrecen garantías absolutas de privacidad o seguridad.
 
 ## Estructura del Proyecto
 
@@ -469,74 +394,37 @@ matrix-tab/
 └── style.css
 ```
 
-## Planes Futuros
+## Historial de Versiones
 
-Hay algunas cosas que me gustaría mejorar a medida que el proyecto vaya creciendo:
+### 2.0.0 — Actualización de la Interfaz y la Experiencia
 
-- Añadir más comandos a la terminal.
-- Mejorar la experiencia y la estabilidad en dispositivos móviles.
-- Seguir optimizando el rendimiento de las animaciones.
-- Probar la extensión en más navegadores basados en Chromium.
-- Explorar opciones de personalización visual.
-- Corregir errores y mejorar las funciones existentes.
+- Refinamiento de la interfaz y de la presentación visual.
+- Incorporación de un Modo Normal con colores neutros.
+- Sustitución del reloj y la fecha por la palabra MATRIX en el Modo Normal.
+- Mejoras en el funcionamiento de la animación Matrix.
+- Paginación con cuatro accesos directos por página.
+- Incorporación de controles e indicadores de navegación.
+- Mejoras en la gestión y validación de accesos directos.
+- Búsqueda por voz cuando el navegador la admite.
+- Mejoras de adaptación a diferentes pantallas y de accesibilidad.
+- Actualización de la interfaz y de la documentación de los comandos de la terminal.
 
-Esta lista es solo un conjunto de ideas, no un calendario fijo. Los planes pueden cambiar según lo que vaya aprendiendo y el tiempo que tenga para trabajar en el proyecto.
+### 1.0.0 — Lanzamiento Inicial
+
+- Creación de la primera página de Nueva Pestaña inspirada en Matrix.
+- Incorporación de la animación de lluvia digital mediante HTML Canvas.
+- Implementación de reloj y fecha dinámicos.
+- Incorporación de accesos directos a sitios web.
+- Creación de la primera terminal interactiva.
+- Configuración de la extensión Chromium con Manifest V3.
 
 ## Contribuciones
 
-Matrix Tab es un proyecto personal, desarrollado como hobby, y actualmente soy la única persona que trabaja en él.
+Las sugerencias, los informes de errores y las contribuciones son bienvenidos.
 
-Si encuentras algún error, tienes una idea o simplemente quieres compartir tu opinión, me alegrará saberlo.
+Puedes abrir una Issue para informar de un problema o proponer una mejora. Los Pull Requests también son bienvenidos.
 
-Las contribuciones son bienvenidas. Puedes abrir una Issue, sugerir una función, compartir comentarios o enviar un Pull Request.
-
-Y si te gusta el proyecto, considera darle una estrella en GitHub. Eso ayuda a que otras personas descubran este pequeño proyecto y me anima a seguir trabajando en él.
-
-[⭐ Dale una estrella a Matrix Tab en GitHub](https://github.com/N0N-glitch/matrix-tab)
-
-¡Gracias por dedicar un poco de tu tiempo a conocer el proyecto!
-
-## Cómo Reportar Problemas
-
-Si algo no funciona como debería, puedes abrir una Issue.
-
-Si es posible, incluye:
-
-- Nombre y versión del navegador.
-- Sistema operativo y dispositivo.
-- Qué estabas intentando hacer.
-- Qué ocurrió y qué esperabas que ocurriera.
-- Pasos para reproducir el problema.
-
-Incluso un informe pequeño puede ayudar a entender qué necesita atención.
-
-## Estado del Desarrollo
-
-Matrix Tab se encuentra actualmente en la versión **1.0.0**.
-
-Desarrollo el proyecto de forma independiente, principalmente utilizando un teléfono Android, que también uso para probarlo. Por eso, trabajo en él en mi tiempo libre y las actualizaciones pueden ser irregulares.
-
-No puedo prometer una frecuencia fija de actualizaciones, que todos los errores se solucionen o que todas las sugerencias se conviertan en funciones.
-
-Este proyecto es, sobre todo, una forma de aprender, experimentar y construir algo que me gusta. No es un producto comercial ni un software mantenido profesionalmente.
-
-## Historial de Versiones
-
-### [1.0.0] — Lanzamiento Inicial
-
-La primera versión pública de Matrix Tab incluye:
-
-- Página de Nueva Pestaña inspirada en Matrix.
-- Fondo animado de lluvia digital.
-- Reloj en tiempo real y fecha dinámica.
-- Accesos directos a GitHub, YouTube, ChatGPT y Stack Overflow.
-- Búsqueda mediante Google y apertura directa de direcciones web.
-- Accesos personalizados.
-- Terminal interactiva con comandos básicos.
-- Terminal desplazable con controles de ventana.
-- Configuración de la extensión mediante Manifest V3.
-
-Este es solo el comienzo. Todavía hay muchas cosas que me gustaría mejorar.
+[⭐ Visita Matrix Tab en GitHub](https://github.com/N0N-glitch/matrix-tab)
 
 ## Licencia
 
