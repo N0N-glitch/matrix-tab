@@ -1,15 +1,13 @@
+
 {
   "manifest_version": 3,
   "name": "Matrix OS - Cyberpunk New Tab",
   "version": "1.0.0",
-  "description": "Transforme sua Nova Aba em um terminal hacker interativo estilo Matrix.",
+  "description": "A Matrix-inspired cyberpunk new tab experience.",
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
   "permissions": [
     "storage"
-  ],
-  "action": {
-    "default_title": "Matrix OS"
-  }
+  ]
 }
