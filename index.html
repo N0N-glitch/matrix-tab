@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -9,33 +10,40 @@
 </head>
 <body>
 
-    <!-- Fundo animado Matrix -->
     <canvas id="matrix-canvas" aria-hidden="true"></canvas>
-    <div class="overlay" aria-hidden="true"></div>
+    <div class="background-overlay" aria-hidden="true"></div>
 
-    <!-- Botão para abrir o terminal -->
-    <button
-        id="toggle-terminal-btn"
-        class="top-terminal-btn"
-        type="button"
-        aria-label="Abrir ou fechar terminal"
-        title="Abrir Terminal"
-    >
-        <span aria-hidden="true">&gt;_</span>
-        <span class="terminal-button-label">Terminal</span>
-    </button>
+    <header class="top-bar">
+        <button
+            id="toggle-terminal-btn"
+            class="terminal-launcher"
+            type="button"
+            aria-label="Open terminal"
+            title="Open terminal"
+        >
+            <span class="terminal-symbol">&gt;_</span>
+            <span class="terminal-button-label">Terminal</span>
+        </button>
 
-    <!-- Conteúdo principal -->
-    <main class="container">
+        <div class="top-brand">
+            <span class="brand-mark">M</span>
+            <span>MATRIX <small>TAB</small></span>
+        </div>
 
-        <!-- Relógio -->
-        <section class="clock-section">
-            <p class="clock-label">SYSTEM LOCAL TIME</p>
+        <div class="system-status">
+            <span class="status-dot"></span>
+            <span id="mode-label">SYSTEM ONLINE</span>
+        </div>
+    </header>
+
+    <main class="main-content" id="main-content">
+
+        <section class="welcome-section">
+            <p class="eyebrow">WELCOME BACK</p>
             <h1 id="clock">00:00:00</h1>
-            <p id="date">Carregando data...</p>
+            <p id="date" class="date-text">Loading date...</p>
         </section>
 
-        <!-- Pesquisa -->
         <section class="search-section">
             <form id="search-form" role="search">
                 <span class="search-icon" aria-hidden="true">
@@ -46,56 +54,66 @@
                 </span>
 
                 <input
-                    type="text"
                     id="search-input"
-                    placeholder="Pesquisar na web ou escrever um endereço..."
+                    type="text"
+                    placeholder="Search the web or enter a URL"
                     autocomplete="off"
                     spellcheck="false"
-                    aria-label="Pesquisar na web ou abrir um endereço"
+                    aria-label="Search the web or enter a URL"
                 >
 
-                <button type="submit" aria-label="Pesquisar">
-                    <span>ENTER</span>
+                <button type="submit" aria-label="Search">
+                    <span>SEARCH</span>
                     <span aria-hidden="true">↵</span>
                 </button>
             </form>
 
-            <p class="search-hint">PESQUISA RÁPIDA · GOOGLE</p>
+            <p class="search-caption">POWERED BY GOOGLE</p>
         </section>
 
-        <!-- Atalhos -->
-        <section class="shortcuts-container">
+        <section class="shortcuts-section">
             <div class="section-heading">
-                <span>QUICK ACCESS</span>
-                <span class="section-line"></span>
+                <div>
+                    <span class="section-kicker">YOUR SPACE</span>
+                    <h2>Quick access</h2>
+                </div>
+
+                <span class="shortcut-count" id="shortcut-count">04 SITES</span>
             </div>
 
-            <div class="shortcuts" id="shortcuts-grid">
-                <!-- Os atalhos são criados pelo JavaScript -->
-            </div>
+            <div class="shortcuts-grid" id="shortcuts-grid"></div>
 
             <button
                 id="add-shortcut-btn"
                 class="add-shortcut-btn"
                 type="button"
             >
-                <span aria-hidden="true">+</span>
-                Adicionar atalho
+                <span>+</span>
+                Add shortcut
             </button>
         </section>
 
         <footer class="page-footer">
-            <span class="status-indicator"></span>
-            MATRIX SYSTEM ONLINE
+            <span class="footer-line"></span>
+            <span>THE MATRIX HAS YOU</span>
+            <span class="footer-line"></span>
         </footer>
 
     </main>
 
-    <!-- Terminal -->
+    <section class="normal-home" id="normal-home" aria-hidden="true">
+        <div class="normal-content">
+            <span class="normal-mark">N</span>
+            <h1>New Tab</h1>
+            <p>Matrix mode is currently disabled.</p>
+            <span class="normal-hint">Use the terminal to return.</span>
+        </div>
+    </section>
+
     <section
         class="terminal hidden"
         id="draggable-terminal"
-        aria-label="Terminal Matrix"
+        aria-label="Matrix terminal"
     >
         <div class="terminal-header" id="terminal-drag-handle">
 
@@ -104,24 +122,24 @@
                     class="dot red"
                     id="btn-close"
                     type="button"
-                    aria-label="Fechar terminal"
-                    title="Fechar"
+                    aria-label="Close terminal"
+                    title="Close"
                 ></button>
 
                 <button
                     class="dot yellow"
                     id="btn-minimize"
                     type="button"
-                    aria-label="Minimizar terminal"
-                    title="Minimizar"
+                    aria-label="Minimize terminal"
+                    title="Minimize"
                 ></button>
 
                 <button
                     class="dot green"
                     id="btn-expand"
                     type="button"
-                    aria-label="Expandir ou restaurar terminal"
-                    title="Expandir"
+                    aria-label="Expand or restore terminal"
+                    title="Expand"
                 ></button>
             </div>
 
@@ -136,9 +154,9 @@
         <div class="terminal-content-wrapper" id="terminal-content-wrapper">
 
             <div class="terminal-body" id="terminal-output" aria-live="polite">
-                <p class="system-msg">Matrix OS v1.0.0 (x86_64-pc-browser)</p>
+                <p class="system-msg">Matrix OS v1.0.0</p>
                 <p class="system-msg">
-                    Digite <span class="highlight">help</span> para ver os comandos disponíveis.
+                    Type <span class="highlight">help</span> to see available commands.
                 </p>
                 <br>
             </div>
@@ -151,9 +169,10 @@
                     id="terminal-input"
                     autocomplete="off"
                     spellcheck="false"
-                    aria-label="Comando do terminal"
+                    aria-label="Terminal command"
                 >
             </div>
+
         </div>
     </section>
 
