@@ -1,13 +1,10 @@
 
 {
   "manifest_version": 3,
-  "name": "Matrix OS - Cyberpunk New Tab",
-  "version": "1.0.0",
-  "description": "A Matrix-inspired cyberpunk new tab experience.",
+  "name": "Matrix Tab",
+  "version": "2.0.0",
+  "description": "A refined Matrix-inspired new tab experience with digital rain, quick shortcuts and an interactive terminal.",
   "chrome_url_overrides": {
     "newtab": "index.html"
-  },
-  "permissions": [
-    "storage"
-  ]
+  }
 }
