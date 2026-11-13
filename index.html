@@ -3,13 +3,19 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
     <meta name="theme-color" content="#080d09">
+    <meta
+        name="description"
+        content="Matrix Tab - A refined Matrix-inspired new tab experience."
+    >
     <title>Matrix Tab</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <canvas id="matrix-canvas" aria-hidden="true"></canvas>
     <div class="background-overlay" aria-hidden="true"></div>
 
@@ -25,7 +31,7 @@
             <span class="terminal-button-label">Terminal</span>
         </button>
 
-        <div class="top-brand">
+        <div class="top-brand" aria-label="Matrix Tab">
             <span class="brand-mark">M</span>
             <span>MATRIX <small>TAB</small></span>
         </div>
@@ -37,11 +43,19 @@
     </header>
 
     <main class="main-content" id="main-content">
-
         <section class="welcome-section">
-            <p class="eyebrow">WELCOME BACK</p>
+            <p class="eyebrow" id="welcome-label">WELCOME BACK</p>
+
             <h1 id="clock">00:00:00</h1>
             <p id="date" class="date-text">Loading date...</p>
+
+            <div
+                class="normal-wordmark"
+                id="normal-wordmark"
+                aria-hidden="true"
+            >
+                MATRIX
+            </div>
         </section>
 
         <section class="search-section">
@@ -62,7 +76,21 @@
                     aria-label="Search the web or enter a URL"
                 >
 
-                <button type="submit" aria-label="Search">
+                <button
+                    id="voice-search-btn"
+                    class="voice-search-btn"
+                    type="button"
+                    aria-label="Voice search"
+                    title="Voice search"
+                >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <rect x="9" y="3" width="6" height="12" rx="3"></rect>
+                        <path d="M5 11a7 7 0 0 0 14 0"></path>
+                        <path d="M12 18v3M9 21h6"></path>
+                    </svg>
+                </button>
+
+                <button class="search-submit" type="submit" aria-label="Search">
                     <span>SEARCH</span>
                     <span aria-hidden="true">↵</span>
                 </button>
@@ -78,19 +106,55 @@
                     <h2>Quick access</h2>
                 </div>
 
-                <span class="shortcut-count" id="shortcut-count">04 SITES</span>
+                <span class="shortcut-count" id="shortcut-count">
+                    04 SITES
+                </span>
             </div>
 
-            <div class="shortcuts-grid" id="shortcuts-grid"></div>
+            <div
+                class="shortcuts-grid"
+                id="shortcuts-grid"
+                aria-live="polite"
+            ></div>
 
-            <button
-                id="add-shortcut-btn"
-                class="add-shortcut-btn"
-                type="button"
-            >
-                <span>+</span>
-                Add shortcut
-            </button>
+            <div class="shortcut-controls">
+                <button
+                    id="add-shortcut-btn"
+                    class="add-shortcut-btn"
+                    type="button"
+                >
+                    <span class="add-icon">+</span>
+                    <span>Add shortcut</span>
+                </button>
+
+                <nav class="pagination" aria-label="Shortcut pages">
+                    <button
+                        id="prev-page-btn"
+                        class="page-arrow"
+                        type="button"
+                        aria-label="Previous page"
+                        title="Previous page"
+                    >
+                        ‹
+                    </button>
+
+                    <div
+                        class="page-dots"
+                        id="page-dots"
+                        aria-label="Page indicators"
+                    ></div>
+
+                    <button
+                        id="next-page-btn"
+                        class="page-arrow"
+                        type="button"
+                        aria-label="Next page"
+                        title="Next page"
+                    >
+                        ›
+                    </button>
+                </nav>
+            </div>
         </section>
 
         <footer class="page-footer">
@@ -98,17 +162,7 @@
             <span>THE MATRIX HAS YOU</span>
             <span class="footer-line"></span>
         </footer>
-
     </main>
-
-    <section class="normal-home" id="normal-home" aria-hidden="true">
-        <div class="normal-content">
-            <span class="normal-mark">N</span>
-            <h1>New Tab</h1>
-            <p>Matrix mode is currently disabled.</p>
-            <span class="normal-hint">Use the terminal to return.</span>
-        </div>
-    </section>
 
     <section
         class="terminal hidden"
@@ -116,7 +170,6 @@
         aria-label="Matrix terminal"
     >
         <div class="terminal-header" id="terminal-drag-handle">
-
             <div class="window-controls">
                 <button
                     class="dot red"
@@ -148,13 +201,19 @@
                 MATRIX TERMINAL
             </span>
 
-            <span class="terminal-version">v1.0.0</span>
+            <span class="terminal-version">v2.0.0</span>
         </div>
 
-        <div class="terminal-content-wrapper" id="terminal-content-wrapper">
-
-            <div class="terminal-body" id="terminal-output" aria-live="polite">
-                <p class="system-msg">Matrix OS v1.0.0</p>
+        <div
+            class="terminal-content-wrapper"
+            id="terminal-content-wrapper"
+        >
+            <div
+                class="terminal-body"
+                id="terminal-output"
+                aria-live="polite"
+            >
+                <p class="system-msg">Matrix Tab v2.0.0</p>
                 <p class="system-msg">
                     Type <span class="highlight">help</span> to see available commands.
                 </p>
@@ -163,7 +222,6 @@
 
             <div class="terminal-input-line">
                 <span class="prompt">user@matrix-tab:~$</span>
-
                 <input
                     type="text"
                     id="terminal-input"
@@ -172,7 +230,6 @@
                     aria-label="Terminal command"
                 >
             </div>
-
         </div>
     </section>
 
